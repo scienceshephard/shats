@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHATS — UML Diagrams</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy: #0D2137;
+    --teal: #0B7A75;
+    --teal-light: #12B5AE;
+    --sky: #D4F1F0;
+    --gold: #E8A838;
+    --white: #FFFFFF;
+    --offwhite: #F5F9F9;
+    --text: #1A2E3B;
+    --muted: #5C7A88;
+    --border: #C5DEDC;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--offwhite);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, #1A4A5E 60%, var(--teal) 100%);
+    padding: 48px 60px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(18,181,174,0.15);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 200px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(232,168,56,0.12);
+  }
+
+  header .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  header p {
+    font-size: 16px;
+    opacity: 0.75;
+    max-width: 580px;
+  }
+
+  .toc {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 20px 60px;
+    background: var(--navy);
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .toc a {
+    color: var(--teal-light);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(18,181,174,0.3);
+    transition: background 0.2s;
+  }
+  .toc a:hover { background: rgba(18,181,174,0.15); }
+
+  .section {
+    max-width: 1200px;
+    margin: 48px auto;
+    padding: 0 32px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-num {
+    width: 44px; height: 44px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .section-title h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--navy);
+  }
+  .section-title p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .diagram-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(13,33,55,0.06);
+  }
+
+  .diagram-card svg {
+    display: block;
+    width: 100%;
+  }
+
+  .mermaid-wrap {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 32px;
+    box-shadow: 0 2px 20px rgba(13,33,55,0.06);
+    overflow-x: auto;
+  }
+  .mermaid { display: flex; justify-content: center; }
+
+  .legend-row {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    padding: 12px 20px;
+    background: var(--sky);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .legend-swatch {
+    width: 32px; height: 3px;
+    border-radius: 2px;
+  }
+  .legend-swatch.solid { background: var(--teal); }
+  .legend-swatch.dashed { background: repeating-linear-gradient(90deg, var(--navy) 0, var(--navy) 6px, transparent 6px, transparent 12px); }
+  .legend-swatch.dashed-gray { background: repeating-linear-gradient(90deg, #999 0, #999 6px, transparent 6px, transparent 12px); }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Object-Oriented Analysis &amp; Design · 140703-OOAD</div>
+  <h1>Smart Healthcare Appointment<br>&amp; Telemedicine System</h1>
+  <p>UML Design Documentation — Rural Nigerian Communities · SHATS Platform</p>
+</header>
+
+<nav class="toc">
+  <a href="#uc">1. Use Case Diagram</a>
+  <a href="#class">2. Class Diagram</a>
+  <a href="#state">3. State Diagram</a>
+  <a href="#seq">4. Sequence Diagram</a>
+  <a href="#act">5. Activity Diagram</a>
+</nav>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     1. USE CASE DIAGRAM
+═══════════════════════════════════════════════════════════════════ -->
+<section class="section" id="uc">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">
+      <h2>Use Case Diagram</h2>
+      <p>System actors and their interactions with the SHATS platform</p>
+    </div>
+  </div>
+
+  <div class="diagram-card">
+  <svg viewBox="0 0 1050 730" xmlns="http://www.w3.org/2000/svg" font-family="DM Sans, sans-serif">
+    <defs>
+      <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#0D2137"/>
+      </marker>
+      <marker id="arrow-teal" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#0B7A75"/>
+      </marker>
+      <marker id="arrow-gold" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#C17D11"/>
+      </marker>
+    </defs>
+
+    <!-- Background -->
+    <rect width="1050" height="730" fill="#F5F9F9"/>
+
+    <!-- System Boundary -->
+    <rect x="175" y="50" width="700" height="640" rx="10"
+          fill="#EBF8F8" stroke="#0B7A75" stroke-width="2.5" stroke-dasharray="10,5"/>
+    <!-- System title banner -->
+    <rect x="175" y="50" width="700" height="40" rx="10" fill="#0B7A75"/>
+    <rect x="175" y="75" width="700" height="15" fill="#0B7A75"/>
+    <text x="525" y="77" text-anchor="middle" font-size="15" font-weight="600" fill="white" letter-spacing="0.5">«system boundary»  SHATS — Smart Healthcare Appointment &amp; Telemedicine System</text>
+
+    <!-- ─── USE CASES ─────────────────────────────────────────────── -->
+    <!-- Left column (patient-centric) -->
+    <!-- UC1: Register / Login -->
+    <ellipse cx="330" cy="160" rx="112" ry="26" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="330" y="165" text-anchor="middle" font-size="12.5" fill="#0D2137" font-weight="500">Register / Login</text>
+
+    <!-- UC2: Book Appointment -->
+    <ellipse cx="330" cy="265" rx="112" ry="26" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="330" y="270" text-anchor="middle" font-size="12.5" fill="#0D2137" font-weight="500">Book Appointment</text>
+
+    <!-- UC3: Video Consultation -->
+    <ellipse cx="330" cy="375" rx="112" ry="26" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="330" y="380" text-anchor="middle" font-size="12.5" fill="#0D2137" font-weight="500">Video Consultation</text>
+
+    <!-- UC4: Emergency Alert -->
+    <ellipse cx="330" cy="485" rx="112" ry="26" fill="#FFF8EC" stroke="#E8A838" stroke-width="1.8"/>
+    <text x="330" y="490" text-anchor="middle" font-size="12.5" fill="#7B4A00" font-weight="500">Trigger Emergency Alert</text>
+
+    <!-- UC5: View Health Records -->
+    <ellipse cx="330" cy="590" rx="112" ry="26" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="330" y="595" text-anchor="middle" font-size="12.5" fill="#0D2137" font-weight="500">View Health Records</text>
+
+    <!-- Middle column -->
+    <!-- UC6: Pay Consultation Fee -->
+    <ellipse cx="525" cy="212" rx="112" ry="26" fill="#F0FBF9" stroke="#0D7A75" stroke-width="1.8"/>
+    <text x="525" y="217" text-anchor="middle" font-size="12.5" fill="#0D2137" font-weight="500">Pay Consultation Fee</text>
+
+    <!-- UC7: Receive Notification -->
+    <ellipse cx="525" cy="430" rx="112" ry="26" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="525" y="435" text-anchor="middle" font-size="12.5" fill="#0D2137" font-weight="500">Receive Notification</text>
+
+    <!-- UC8: Submit Health Data -->
+    <ellipse cx="525" cy="540" rx="112" ry="26" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="525" y="545" text-anchor="middle" font-size="12.5" fill="#0D2137" font-weight="500">Submit Health Data</text>
+
+    <!-- Right column (doctor/admin-centric) -->
+    <!-- UC9: Manage Schedule -->
+    <ellipse cx="725" cy="160" rx="112" ry="26" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="725" y="165" text-anchor="middle" font-size="12.5" fill="#0D2137" font-weight="500">Manage Schedule</text>
+
+    <!-- UC10: Conduct Consultation -->
+    <ellipse cx="725" cy="265" rx="112" ry="26" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="725" y="270" text-anchor="middle" font-size="12.5" fill="#0D2137" font-weight="500">Conduct Consultation</text>
+
+    <!-- UC11: Issue Prescription -->
+    <ellipse cx="725" cy="370" rx="112" ry="26" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="725" y="375" text-anchor="middle" font-size="12.5" fill="#0D2137" font-weight="500">Issue Prescription</text>
+
+    <!-- UC12: Generate Reports -->
+    <ellipse cx="725" cy="475" rx="112" ry="26" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="725" y="480" text-anchor="middle" font-size="12.5" fill="#0D2137" font-weight="500">Generate Reports</text>
+
+    <!-- UC13: Manage Users -->
+    <ellipse cx="725" cy="575" rx="112" ry="26" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="725" y="580" text-anchor="middle" font-size="12.5" fill="#0D2137" font-weight="500">Manage Users / System</text>
+
+    <!-- ─── ACTORS ─────────────────────────────────────────────────── -->
+    <!-- Patient (left) -->
+    <circle cx="75" cy="270" r="19" fill="none" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="75" y1="289" x2="75" y2="338" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="75" y1="305" x2="50" y2="328" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="75" y1="305" x2="100" y2="328" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="75" y1="338" x2="55" y2="365" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="75" y1="338" x2="95" y2="365" stroke="#0D2137" stroke-width="2.2"/>
+    <text x="75" y="385" text-anchor="middle" font-size="13" fill="#0D2137" font-weight="600">Patient</text>
+
+    <!-- CHW (left-bottom) -->
+    <circle cx="75" cy="495" r="19" fill="none" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="75" y1="514" x2="75" y2="563" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="75" y1="530" x2="50" y2="553" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="75" y1="530" x2="100" y2="553" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="75" y1="563" x2="55" y2="590" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="75" y1="563" x2="95" y2="590" stroke="#0D2137" stroke-width="2.2"/>
+    <text x="75" y="610" text-anchor="middle" font-size="12" fill="#0D2137" font-weight="600">Community</text>
+    <text x="75" y="626" text-anchor="middle" font-size="12" fill="#0D2137" font-weight="600">Health Worker</text>
+
+    <!-- Doctor (right-top) -->
+    <circle cx="975" cy="215" r="19" fill="none" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="975" y1="234" x2="975" y2="283" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="975" y1="250" x2="950" y2="273" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="975" y1="250" x2="1000" y2="273" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="975" y1="283" x2="955" y2="310" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="975" y1="283" x2="995" y2="310" stroke="#0D2137" stroke-width="2.2"/>
+    <text x="975" y="328" text-anchor="middle" font-size="13" fill="#0D2137" font-weight="600">Doctor</text>
+
+    <!-- Admin (right-bottom) -->
+    <circle cx="975" cy="455" r="19" fill="none" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="975" y1="474" x2="975" y2="523" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="975" y1="490" x2="950" y2="513" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="975" y1="490" x2="1000" y2="513" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="975" y1="523" x2="955" y2="550" stroke="#0D2137" stroke-width="2.2"/>
+    <line x1="975" y1="523" x2="995" y2="550" stroke="#0D2137" stroke-width="2.2"/>
+    <text x="975" y="568" text-anchor="middle" font-size="13" fill="#0D2137" font-weight="600">Admin</text>
+
+    <!-- Payment Gateway (box actor, right middle) -->
+    <rect x="927" y="340" width="96" height="46" rx="4" fill="white" stroke="#0D2137" stroke-width="1.8"/>
+    <rect x="927" y="340" width="96" height="14" rx="4" fill="#0D2137"/>
+    <rect x="927" y="347" width="96" height="7" fill="#0D2137"/>
+    <text x="975" y="352" text-anchor="middle" font-size="9" fill="white">«system»</text>
+    <text x="975" y="368" text-anchor="middle" font-size="11" fill="#0D2137" font-weight="500">Payment</text>
+    <text x="975" y="381" text-anchor="middle" font-size="11" fill="#0D2137" font-weight="500">Gateway</text>
+
+    <!-- ─── ASSOCIATION LINES ──────────────────────────────────────── -->
+    <!-- Patient → Register/Login -->
+    <line x1="116" y1="255" x2="218" y2="168" stroke="#4A7C8A" stroke-width="1.4"/>
+    <!-- Patient → Book Appointment -->
+    <line x1="120" y1="270" x2="218" y2="267" stroke="#4A7C8A" stroke-width="1.4"/>
+    <!-- Patient → Video Consultation -->
+    <line x1="116" y1="285" x2="218" y2="368" stroke="#4A7C8A" stroke-width="1.4"/>
+    <!-- Patient → Emergency Alert -->
+    <line x1="110" y1="295" x2="218" y2="478" stroke="#4A7C8A" stroke-width="1.4"/>
+    <!-- Patient → View Health Records -->
+    <line x1="108" y1="302" x2="218" y2="583" stroke="#4A7C8A" stroke-width="1.4"/>
+
+    <!-- CHW → Submit Health Data -->
+    <line x1="116" y1="500" x2="413" y2="537" stroke="#4A7C8A" stroke-width="1.4"/>
+    <!-- CHW → Emergency Alert -->
+    <line x1="116" y1="488" x2="218" y2="482" stroke="#4A7C8A" stroke-width="1.4"/>
+    <!-- CHW → Receive Notification -->
+    <line x1="116" y1="510" x2="413" y2="433" stroke="#4A7C8A" stroke-width="1.4"/>
+
+    <!-- Doctor → Manage Schedule -->
+    <line x1="934" y1="208" x2="837" y2="166" stroke="#4A7C8A" stroke-width="1.4"/>
+    <!-- Doctor → Conduct Consultation -->
+    <line x1="934" y1="218" x2="837" y2="265" stroke="#4A7C8A" stroke-width="1.4"/>
+    <!-- Doctor → Issue Prescription -->
+    <line x1="930" y1="228" x2="837" y2="362" stroke="#4A7C8A" stroke-width="1.4"/>
+    <!-- Doctor → Receive Notification -->
+    <line x1="934" y1="230" x2="637" y2="423" stroke="#4A7C8A" stroke-width="1.4"/>
+
+    <!-- Admin → Generate Reports -->
+    <line x1="934" y1="448" x2="837" y2="470" stroke="#4A7C8A" stroke-width="1.4"/>
+    <!-- Admin → Manage Users -->
+    <line x1="934" y1="460" x2="837" y2="572" stroke="#4A7C8A" stroke-width="1.4"/>
+
+    <!-- Payment GW → Pay Consultation Fee -->
+    <line x1="927" y1="355" x2="637" y2="222" stroke="#4A7C8A" stroke-width="1.4"/>
+
+    <!-- ─── INCLUDE RELATIONSHIPS (dashed arrows) ────────────────── -->
+    <!-- Book Appointment --include--> Pay Consultation Fee -->
+    <line x1="429" y1="253" x2="433" y2="226" stroke="#0B7A75" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrow-teal)"/>
+    <rect x="432" y="236" width="90" height="16" rx="3" fill="#EBF8F8"/>
+    <text x="477" y="247" text-anchor="middle" font-size="10" fill="#0B7A75" font-style="italic">«include»</text>
+
+    <!-- Video Consultation --include--> Issue Prescription -->
+    <line x1="442" y1="370" x2="613" y2="370" stroke="#0B7A75" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrow-teal)"/>
+    <rect x="473" y="358" width="90" height="16" rx="3" fill="#EBF8F8"/>
+    <text x="518" y="369" text-anchor="middle" font-size="10" fill="#0B7A75" font-style="italic">«include»</text>
+
+    <!-- Book Appointment --include--> Register/Login -->
+    <line x1="330" y1="239" x2="330" y2="186" stroke="#0B7A75" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrow-teal)"/>
+    <rect x="340" y="207" width="72" height="16" rx="3" fill="#EBF8F8"/>
+    <text x="376" y="218" text-anchor="middle" font-size="10" fill="#0B7A75" font-style="italic">«include»</text>
+
+    <!-- Emergency Alert --extend--> Receive Notification -->
+    <line x1="435" y1="478" x2="437" y2="440" stroke="#C17D11" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#arrow-gold)"/>
+    <rect x="438" y="454" width="78" height="16" rx="3" fill="#FFF8EC"/>
+    <text x="477" y="465" text-anchor="middle" font-size="10" fill="#8B5E02" font-style="italic">«extend»</text>
+
+    <!-- Legend -->
+    <rect x="186" y="662" width="670" height="28" rx="6" fill="white" stroke="#C5DEDC"/>
+    <line x1="206" y1="676" x2="240" y2="676" stroke="#4A7C8A" stroke-width="1.4"/>
+    <text x="250" y="680" font-size="11" fill="#5C7A88">Association</text>
+    <line x1="330" y1="676" x2="364" y2="676" stroke="#0B7A75" stroke-width="1.5" stroke-dasharray="6,4"/>
+    <polygon points="364,673 370,676 364,679" fill="#0B7A75"/>
+    <text x="378" y="680" font-size="11" fill="#5C7A88">«include»</text>
+    <line x1="448" y1="676" x2="482" y2="676" stroke="#C17D11" stroke-width="1.5" stroke-dasharray="5,4"/>
+    <polygon points="482,673 488,676 482,679" fill="#C17D11"/>
+    <text x="496" y="680" font-size="11" fill="#5C7A88">«extend»</text>
+    <rect x="570" y="668" width="46" height="16" rx="2" fill="white" stroke="#0D2137" stroke-width="1.4"/>
+    <text x="593" y="679" text-anchor="middle" font-size="9" fill="#0D2137">«system»</text>
+    <text x="648" y="680" font-size="11" fill="#5C7A88">System Actor</text>
+    <circle cx="760" cy="676" r="9" fill="none" stroke="#0D2137" stroke-width="1.8"/>
+    <text x="778" y="680" font-size="11" fill="#5C7A88">Human Actor</text>
+  </svg>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     2. CLASS DIAGRAM
+═══════════════════════════════════════════════════════════════════ -->
+<section class="section" id="class">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">
+      <h2>Class Diagram</h2>
+      <p>Static structure — classes, attributes, operations and relationships</p>
+    </div>
+  </div>
+  <div class="mermaid-wrap">
+    <div class="mermaid">
+classDiagram
+    direction TB
+    class Patient {
+        +String patientId
+        +String fullName
+        +Date dateOfBirth
+        +String gender
+        +String phoneNumber
+        +String location
+        +String bloodGroup
+        +String nHISNumber
+        +String password
+        +register()
+        +login()
+        +bookAppointment()
+        +viewHealthRecords()
+        +triggerEmergency()
+        +updateProfile()
+    }
+
+    class Doctor {
+        +String doctorId
+        +String fullName
+        +String specialization
+        +String licenseNumber
+        +Float rating
+        +Float consultationFee
+        +String availability
+        +String language
+        +login()
+        +manageSchedule()
+        +conductConsultation()
+        +issuePrescription()
+        +viewPatientHistory()
+        +acceptAppointment()
+    }
+
+    class CommunityHealthWorker {
+        +String chwId
+        +String fullName
+        +String zone
+        +String certification
+        +String phone
+        +submitPatientData()
+        +respondToEmergency()
+        +monitorPatients()
+    }
+
+    class Appointment {
+        +String appointmentId
+        +DateTime scheduledAt
+        +String status
+        +String type
+        +String notes
+        +Float fee
+        +confirm()
+        +cancel()
+        +reschedule()
+        +joinSession()
+        +getStatus()
+    }
+
+    class Consultation {
+        +String consultationId
+        +DateTime startTime
+        +DateTime endTime
+        +String diagnosis
+        +String doctorNotes
+        +String videoCallUrl
+        +startSession()
+        +endSession()
+        +addDiagnosis()
+        +shareScreen()
+    }
+
+    class HealthRecord {
+        +String recordId
+        +Date recordDate
+        +String diagnosis
+        +String vitals
+        +String attachments
+        +addRecord()
+        +viewRecord()
+        +shareRecord()
+    }
+
+    class Prescription {
+        +String prescriptionId
+        +Date issuedDate
+        +String medications
+        +String dosage
+        +String instructions
+        +String validity
+        +issuePrescription()
+        +viewPrescription()
+        +refill()
+    }
+
+    class Payment {
+        +String paymentId
+        +Float amount
+        +String method
+        +String status
+        +DateTime transactedAt
+        +String reference
+        +processPayment()
+        +requestRefund()
+        +getReceipt()
+    }
+
+    class EmergencyAlert {
+        +String alertId
+        +DateTime triggeredAt
+        +String gpsCoordinates
+        +String severity
+        +String status
+        +String description
+        +trigger()
+        +dispatch()
+        +acknowledge()
+        +resolve()
+        +escalate()
+    }
+
+    Patient "1" --> "0..*" Appointment : books
+    Doctor "1" --> "0..*" Appointment : accepts
+    Appointment "1" --> "0..1" Consultation : generates
+    Consultation "1" --> "0..*" Prescription : includes
+    Patient "1" --> "1..*" HealthRecord : owns
+    Consultation "1" --> "1" HealthRecord : updates
+    Appointment "1" --> "0..1" Payment : requires
+    Patient "1" --> "0..*" EmergencyAlert : triggers
+    CommunityHealthWorker "1" --> "0..*" EmergencyAlert : responds
+    CommunityHealthWorker "1" --> "0..*" Patient : monitors
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     3. STATE DIAGRAM — Appointment Lifecycle
+═══════════════════════════════════════════════════════════════════ -->
+<section class="section" id="state">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div class="section-title">
+      <h2>State Diagram — Appointment Lifecycle</h2>
+      <p>Object state transitions from booking through to completion or cancellation</p>
+    </div>
+  </div>
+  <div class="mermaid-wrap">
+    <div class="mermaid">
+stateDiagram-v2
+    [*] --> Pending : Patient submits booking request\n/ System saves appointment
+
+    Pending --> Confirmed : Doctor accepts\n/ Send SMS confirmation to patient
+    Pending --> Rejected : Doctor declines\n/ Notify patient with reason
+    Pending --> Cancelled : Patient cancels within window\n/ Trigger refund process
+
+    Confirmed --> InSession : Both parties join video call\n/ System starts session timer
+    Confirmed --> Cancelled : Cancellation (>24 hrs notice)\n/ Process partial refund
+
+    state InSession {
+        [*] --> AwaitingDoctor
+        AwaitingDoctor --> ActiveConsultation : Doctor joins
+        ActiveConsultation --> Prescribing : Diagnosis recorded
+        Prescribing --> [*] : Prescription issued
+    }
+
+    InSession --> Completed : Session ended normally\n/ Record saved, feedback requested
+    InSession --> Interrupted : Network failure detected\n/ System saves progress
+    Interrupted --> InSession : Patient reconnects\n/ Resume from saved state
+    Interrupted --> Completed : Reconnection timeout\n/ Mark as completed with notes
+
+    Completed --> [*]
+    Rejected --> [*]
+    Cancelled --> [*]
+    </div>
+  </div>
+  <br>
+  <div class="mermaid-wrap" style="margin-top:24px">
+    <p style="font-size:13px;color:#5C7A88;font-weight:600;margin-bottom:16px">State Diagram — Emergency Alert Lifecycle</p>
+    <div class="mermaid">
+stateDiagram-v2
+    [*] --> Raised : Patient / CHW triggers alert\n/ GPS coordinates captured
+
+    Raised --> Dispatched : Nearest CHW identified\n/ Push notification sent
+    Dispatched --> Acknowledged : CHW confirms receipt\n/ ETA communicated
+    Acknowledged --> Attending : CHW arrives on scene\n/ Status update sent
+
+    state Attending {
+        [*] --> Assessing
+        Assessing --> Stabilising : First aid administered
+        Stabilising --> [*]
+    }
+
+    Attending --> Resolved : Patient stable, no referral needed
+    Attending --> Referred : Condition requires hospital\n/ Ambulance dispatched
+
+    Resolved --> [*]
+    Referred --> [*]
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     4. SEQUENCE DIAGRAM — Book Appointment
+═══════════════════════════════════════════════════════════════════ -->
+<section class="section" id="seq">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div class="section-title">
+      <h2>Sequence Diagram — Book Appointment</h2>
+      <p>Time-ordered message exchanges for the appointment booking workflow</p>
+    </div>
+  </div>
+  <div class="mermaid-wrap">
+    <div class="mermaid">
+sequenceDiagram
+    actor P as Patient
+    participant App as Mobile App
+    participant Srv as SHATS Server
+    participant DB as Database
+    participant Doc as Doctor
+    participant NS as Notification Service
+    participant PG as Payment Gateway
+
+    P->>App: 1. Open app & tap Book Appointment
+    App->>Srv: 2. GET /doctors?specialty=General
+    Srv->>DB: 3. Query available doctors
+    DB-->>Srv: 4. Doctor list with slots
+    Srv-->>App: 5. Return doctor profiles
+    App-->>P: 6. Display available doctors
+
+    P->>App: 7. Select Dr. Adaeze — Thu 10:00 AM
+    App->>Srv: 8. POST /appointments {doctorId, slot, patientId}
+    Srv->>DB: 9. Lock time slot (optimistic lock)
+
+    Srv->>PG: 10. Initiate payment {amount: ₦2,500, method: MoMo}
+    P->>PG: 11. Approve payment via MTN MoMo PIN
+    PG-->>Srv: 12. Payment confirmed {txRef: TXN-9284}
+
+    Srv->>DB: 13. Save appointment {status: PENDING}
+    Srv->>NS: 14. Send push notification to Doctor
+    NS-->>Doc: 15. New appointment request — Patient: Emeka O.
+
+    Doc-->>Srv: 16. Confirm appointment
+    Srv->>DB: 17. Update status → CONFIRMED
+    Srv->>NS: 18. Notify patient of confirmation
+    NS-->>P: 19. SMS: Appointment confirmed — Thu 10:00 AM with Dr. Adaeze
+
+    Srv-->>App: 20. Return appointment details
+    App-->>P: 21. Show confirmation screen + add to calendar
+    </div>
+  </div>
+
+  <div class="mermaid-wrap" style="margin-top:24px">
+    <p style="font-size:13px;color:#5C7A88;font-weight:600;margin-bottom:16px">Sequence Diagram — Telemedicine Video Consultation</p>
+    <div class="mermaid">
+sequenceDiagram
+    actor P as Patient
+    participant App as Mobile App
+    participant Srv as SHATS Server
+    participant VC as Video Call Service
+    actor D as Doctor
+    participant HR as Health Record
+
+    P->>App: 1. Tap Join Consultation (5 min before)
+    App->>Srv: 2. POST /session/join {appointmentId, token}
+    Srv->>VC: 3. Create video room {appointmentId}
+    VC-->>Srv: 4. Return room URL + credentials
+    Srv-->>App: 5. Return session token
+    App->>VC: 6. Connect patient to video room
+
+    D->>Srv: 7. Doctor joins session
+    Srv->>VC: 8. Add doctor to room
+    VC-->>D: 9. Video connection established
+    VC-->>P: 10. Both parties connected
+
+    D->>D: 11. Conduct medical consultation
+    D->>Srv: 12. POST /consultation/diagnosis {symptoms, findings}
+    Srv->>HR: 13. Save consultation notes
+    HR-->>Srv: 14. Record ID confirmed
+
+    D->>Srv: 15. POST /prescription {medications, dosage, instructions}
+    Srv->>HR: 16. Attach prescription to health record
+    Srv-->>App: 17. Prescription available for patient
+    App-->>P: 18. Notification: Prescription ready
+
+    D->>Srv: 19. End session
+    Srv->>VC: 20. Close video room
+    Srv-->>App: 21. Session summary + follow-up date
+    App-->>P: 22. Rate your consultation (1-5 stars)
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     5. ACTIVITY DIAGRAM — Appointment Booking Workflow
+═══════════════════════════════════════════════════════════════════ -->
+<section class="section" id="act">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div class="section-title">
+      <h2>Activity Diagram — Appointment Booking Workflow</h2>
+      <p>End-to-end flow with swimlanes for Patient, System, Doctor, and Payment Gateway</p>
+    </div>
+  </div>
+
+  <!-- Hand-drawn SVG Activity Diagram with swimlanes -->
+  <div class="diagram-card">
+  <svg viewBox="0 0 1060 1100" xmlns="http://www.w3.org/2000/svg" font-family="DM Sans, sans-serif">
+    <defs>
+      <marker id="actarrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+        <polygon points="0 0, 10 4, 0 8" fill="#0D2137"/>
+      </marker>
+      <marker id="actarrow-sm" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#0D2137"/>
+      </marker>
+    </defs>
+
+    <rect width="1060" height="1100" fill="#F5F9F9"/>
+
+    <!-- Swimlane headers -->
+    <rect x="10" y="10" width="258" height="50" rx="6" fill="#0D2137"/>
+    <text x="139" y="41" text-anchor="middle" font-size="13" fill="white" font-weight="600">Patient</text>
+
+    <rect x="272" y="10" width="258" height="50" rx="6" fill="#0B7A75"/>
+    <text x="401" y="41" text-anchor="middle" font-size="13" fill="white" font-weight="600">SHATS System</text>
+
+    <rect x="534" y="10" width="258" height="50" rx="6" fill="#1A4A5E"/>
+    <text x="663" y="41" text-anchor="middle" font-size="13" fill="white" font-weight="600">Payment Gateway</text>
+
+    <rect x="796" y="10" width="254" height="50" rx="6" fill="#2D6A4F"/>
+    <text x="923" y="41" text-anchor="middle" font-size="13" fill="white" font-weight="600">Doctor</text>
+
+    <!-- Swimlane vertical dividers -->
+    <line x1="10" y1="60" x2="10" y2="1090" stroke="#C5DEDC" stroke-width="1.5"/>
+    <line x1="268" y1="60" x2="268" y2="1090" stroke="#C5DEDC" stroke-width="1.5"/>
+    <line x1="530" y1="60" x2="530" y2="1090" stroke="#C5DEDC" stroke-width="1.5"/>
+    <line x1="792" y1="60" x2="792" y2="1090" stroke="#C5DEDC" stroke-width="1.5"/>
+    <line x1="1050" y1="60" x2="1050" y2="1090" stroke="#C5DEDC" stroke-width="1.5"/>
+
+    <!-- Background stripes per lane -->
+    <rect x="11" y="61" width="257" height="1028" fill="#F0F7FA" opacity="0.5"/>
+    <rect x="269" y="61" width="261" height="1028" fill="#EBF8F0" opacity="0.4"/>
+    <rect x="531" y="61" width="261" height="1028" fill="#F0F7FA" opacity="0.3"/>
+    <rect x="793" y="61" width="257" height="1028" fill="#EBF8F0" opacity="0.3"/>
+
+    <!-- ── INITIAL NODE ─────────────────────────────────────────── -->
+    <circle cx="139" cy="100" r="14" fill="#0D2137"/>
+    <!-- arrow down -->
+    <line x1="139" y1="114" x2="139" y2="145" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── A1: Open App & Login ─────────────────────────────────── -->
+    <rect x="55" y="145" width="168" height="44" rx="22" fill="white" stroke="#0D2137" stroke-width="1.8"/>
+    <text x="139" y="172" text-anchor="middle" font-size="12" fill="#0D2137" font-weight="500">Open App &amp; Login</text>
+    <line x1="139" y1="189" x2="139" y2="220" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── A2: Search Doctors ───────────────────────────────────── -->
+    <rect x="55" y="220" width="168" height="44" rx="22" fill="white" stroke="#0D2137" stroke-width="1.8"/>
+    <text x="139" y="247" text-anchor="middle" font-size="12" fill="#0D2137" font-weight="500">Search Doctors</text>
+    <!-- arrow crosses into System lane -->
+    <line x1="223" y1="242" x2="283" y2="242" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── B1: Query Available Doctors ─────────────────────────── -->
+    <rect x="283" y="220" width="200" height="44" rx="22" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="383" y="247" text-anchor="middle" font-size="12" fill="#0B7A75" font-weight="500">Query Available Doctors</text>
+    <line x1="383" y1="264" x2="383" y2="295" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── B2: Return Doctor List ──────────────────────────────── -->
+    <rect x="283" y="295" width="200" height="44" rx="22" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="383" y="322" text-anchor="middle" font-size="12" fill="#0B7A75" font-weight="500">Return Doctor Profiles</text>
+    <!-- back to patient -->
+    <line x1="283" y1="317" x2="223" y2="317" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── A3: Select Doctor & Slot ─────────────────────────────── -->
+    <rect x="39" y="295" width="184" height="44" rx="22" fill="white" stroke="#0D2137" stroke-width="1.8"/>
+    <text x="131" y="322" text-anchor="middle" font-size="12" fill="#0D2137" font-weight="500">Select Doctor &amp; Time Slot</text>
+    <line x1="139" y1="339" x2="139" y2="370" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── A4: Confirm Appointment Details ─────────────────────── -->
+    <rect x="47" y="370" width="184" height="44" rx="22" fill="white" stroke="#0D2137" stroke-width="1.8"/>
+    <text x="139" y="397" text-anchor="middle" font-size="12" fill="#0D2137" font-weight="500">Confirm Details</text>
+    <!-- arrow to System lane -->
+    <line x1="231" y1="392" x2="283" y2="392" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── B3: Lock Time Slot ──────────────────────────────────── -->
+    <rect x="283" y="370" width="200" height="44" rx="22" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="383" y="397" text-anchor="middle" font-size="12" fill="#0B7A75" font-weight="500">Lock Time Slot (DB)</text>
+    <line x1="383" y1="414" x2="383" y2="440" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── DECISION: Slot Available? ──────────────────────────── -->
+    <polygon points="383,440 440,465 383,490 326,465" fill="white" stroke="#0D2137" stroke-width="1.8"/>
+    <text x="383" y="469" text-anchor="middle" font-size="11" fill="#0D2137" font-weight="500">Slot available?</text>
+    <!-- NO → back to patient search -->
+    <text x="258" y="487" font-size="11" fill="#CC0000">No</text>
+    <line x1="326" y1="465" x2="139" y2="465" stroke="#CC0000" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <line x1="139" y1="465" x2="139" y2="339" stroke="#CC0000" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#actarrow)"/>
+    <!-- YES → down -->
+    <text x="444" y="487" font-size="11" fill="#0B7A75">Yes</text>
+    <line x1="383" y1="490" x2="383" y2="515" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── FORK: Parallel Payment & Doctor Notify ─────────────── -->
+    <rect x="183" y="515" width="400" height="8" rx="4" fill="#0D2137"/>
+    <!-- Left fork arrow → Payment Gateway lane -->
+    <line x1="663" y1="519" x2="663" y2="544" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+    <!-- Right fork arrow → still in System -->
+    <line x1="383" y1="523" x2="383" y2="544" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── B4: Send Payment Request ────────────────────────────── -->
+    <rect x="283" y="544" width="200" height="44" rx="22" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="383" y="571" text-anchor="middle" font-size="12" fill="#0B7A75" font-weight="500">Send Payment Request</text>
+    <!-- arrow to Payment GW lane -->
+    <line x1="483" y1="566" x2="543" y2="566" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── C1: Initiate MoMo Payment ───────────────────────────── -->
+    <rect x="543" y="544" width="210" height="44" rx="22" fill="white" stroke="#1A4A5E" stroke-width="1.8"/>
+    <text x="648" y="571" text-anchor="middle" font-size="12" fill="#1A4A5E" font-weight="500">Initiate MTN MoMo Debit</text>
+    <!-- back to patient to approve -->
+    <line x1="543" y1="566" x2="223" y2="566" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── A5: Approve Payment (PIN) ─────────────────────────────── -->
+    <rect x="39" y="544" width="184" height="44" rx="22" fill="white" stroke="#0D2137" stroke-width="1.8"/>
+    <text x="131" y="571" text-anchor="middle" font-size="12" fill="#0D2137" font-weight="500">Enter MoMo PIN / Approve</text>
+    <line x1="223" y1="566" x2="283" y2="566" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── DECISION: Payment Success? ─────────────────────────── -->
+    <polygon points="663,608 720,633 663,658 606,633" fill="white" stroke="#0D2137" stroke-width="1.8"/>
+    <text x="663" y="637" text-anchor="middle" font-size="11" fill="#0D2137" font-weight="500">Payment OK?</text>
+    <!-- NO → retry -->
+    <text x="718" y="628" font-size="11" fill="#CC0000">No</text>
+    <line x1="720" y1="633" x2="780" y2="633" stroke="#CC0000" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <line x1="780" y1="633" x2="780" y2="566" stroke="#CC0000" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <line x1="780" y1="566" x2="753" y2="566" stroke="#CC0000" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#actarrow)"/>
+    <text x="787" y="603" font-size="10" fill="#CC0000">Retry</text>
+    <!-- YES → down -->
+    <text x="666" y="662" font-size="11" fill="#0B7A75">Yes</text>
+    <line x1="663" y1="658" x2="663" y2="683" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── C2: Confirm Payment ─────────────────────────────────── -->
+    <rect x="558" y="683" width="210" height="44" rx="22" fill="white" stroke="#1A4A5E" stroke-width="1.8"/>
+    <text x="663" y="710" text-anchor="middle" font-size="12" fill="#1A4A5E" font-weight="500">Payment Confirmed (txRef)</text>
+    <!-- back to System -->
+    <line x1="558" y1="705" x2="483" y2="705" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── B5: Save Appointment (PENDING) ─────────────────────── -->
+    <rect x="283" y="683" width="200" height="44" rx="22" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="383" y="710" text-anchor="middle" font-size="12" fill="#0B7A75" font-weight="500">Save Appointment: PENDING</text>
+    <line x1="383" y1="727" x2="383" y2="752" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── JOIN: Wait for payment to finish ───────────────────── -->
+    <rect x="183" y="752" width="400" height="8" rx="4" fill="#0D2137"/>
+    <line x1="383" y1="760" x2="383" y2="785" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── B6: Notify Doctor ───────────────────────────────────── -->
+    <rect x="283" y="785" width="200" height="44" rx="22" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="383" y="812" text-anchor="middle" font-size="12" fill="#0B7A75" font-weight="500">Send Notification to Doctor</text>
+    <!-- arrow to Doctor lane -->
+    <line x1="483" y1="807" x2="805" y2="807" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── D1: Doctor Reviews & Confirms ──────────────────────── -->
+    <rect x="805" y="785" width="200" height="44" rx="22" fill="white" stroke="#2D6A4F" stroke-width="1.8"/>
+    <text x="905" y="812" text-anchor="middle" font-size="12" fill="#2D6A4F" font-weight="500">Review &amp; Confirm Booking</text>
+    <!-- back to System -->
+    <line x1="805" y1="807" x2="483" y2="857" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── B7: Update Status → CONFIRMED ──────────────────────── -->
+    <rect x="283" y="840" width="200" height="44" rx="22" fill="white" stroke="#0B7A75" stroke-width="1.8"/>
+    <text x="383" y="867" text-anchor="middle" font-size="12" fill="#0B7A75" font-weight="500">Update Status: CONFIRMED</text>
+    <line x1="383" y1="884" x2="383" y2="909" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── FORK: Notify patient + audit log ───────────────────── -->
+    <rect x="183" y="909" width="400" height="8" rx="4" fill="#0D2137"/>
+    <line x1="283" y1="917" x2="139" y2="917" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+    <line x1="483" y1="917" x2="663" y2="917" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── A6: Receive SMS Confirmation ───────────────────────── -->
+    <rect x="47" y="917" width="184" height="44" rx="22" fill="white" stroke="#0D2137" stroke-width="1.8"/>
+    <text x="139" y="944" text-anchor="middle" font-size="12" fill="#0D2137" font-weight="500">Receive SMS Confirmation</text>
+    <line x1="139" y1="961" x2="139" y2="986" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── A7: View Appointment in App ────────────────────────── -->
+    <rect x="47" y="986" width="184" height="44" rx="22" fill="white" stroke="#0D2137" stroke-width="1.8"/>
+    <text x="139" y="1013" text-anchor="middle" font-size="12" fill="#0D2137" font-weight="500">View Appointment in App</text>
+    <line x1="139" y1="1030" x2="139" y2="1055" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── C3: Log Audit Trail ─────────────────────────────────── -->
+    <rect x="558" y="907" width="210" height="44" rx="22" fill="white" stroke="#1A4A5E" stroke-width="1.8"/>
+    <text x="663" y="934" text-anchor="middle" font-size="12" fill="#1A4A5E" font-weight="500">Log Audit Trail (NDPR)</text>
+    <line x1="663" y1="951" x2="663" y2="1055" stroke="#0D2137" stroke-width="2"/>
+
+    <!-- ── JOIN: Final join ───────────────────────────────────── -->
+    <rect x="89" y="1055" width="648" height="8" rx="4" fill="#0D2137"/>
+    <line x1="383" y1="1063" x2="383" y2="1088" stroke="#0D2137" stroke-width="2" marker-end="url(#actarrow)"/>
+
+    <!-- ── FINAL NODE ──────────────────────────────────────────── -->
+    <circle cx="383" cy="1088" r="9" fill="none" stroke="#0D2137" stroke-width="3"/>
+    <circle cx="383" cy="1088" r="13" fill="none" stroke="#0D2137" stroke-width="1.8"/>
+
+    <!-- Labels on lanes bottom -->
+    <rect x="10" y="1075" width="258" height="20" fill="#0D2137" opacity="0.08"/>
+    <rect x="272" y="1075" width="258" height="20" fill="#0B7A75" opacity="0.08"/>
+    <rect x="534" y="1075" width="258" height="20" fill="#1A4A5E" opacity="0.08"/>
+    <rect x="796" y="1075" width="254" height="20" fill="#2D6A4F" opacity="0.08"/>
+  </svg>
+  </div>
+
+  <div class="mermaid-wrap" style="margin-top:24px">
+    <p style="font-size:13px;color:#5C7A88;font-weight:600;margin-bottom:16px">Activity Diagram — Emergency Response Workflow</p>
+    <div class="mermaid">
+flowchart TD
+    S([●  Start]) --> A[Patient / CHW Opens Emergency Screen]
+    A --> B[Tap 'Send Emergency Alert']
+    B --> C{GPS Signal\nAvailable?}
+    C -- No --> D[Enter Location Manually]
+    D --> E
+    C -- Yes --> E[Capture GPS Coordinates]
+    E --> F[POST Emergency Alert to Server]
+    F --> G{Nearest CHW\nAvailable?}
+    G -- Yes --> H[Dispatch Push Notification to CHW]
+    G -- No --> I[Escalate to Nearest Clinic / Hospital]
+    H --> J[CHW Acknowledges Alert]
+    J --> K[CHW Travels to Patient Location]
+    K --> L[Parallel Processing]
+    L --> M[Admin Dashboard Updated]
+    L --> N[Doctor Notified via App]
+    L --> O[Family Contact SMS Sent]
+    M --> P{Patient Condition?}
+    N --> P
+    O --> P
+    P -- Stable --> Q[CHW Provides First Aid & Resolves]
+    P -- Critical --> R[Request Ambulance / Referral]
+    Q --> T([◎  End])
+    R --> T
+    </div>
+  </div>
+</section>
+
+<footer style="background:#0D2137;color:rgba(255,255,255,0.5);text-align:center;padding:24px;font-size:12px;margin-top:48px">
+  SHATS — Smart Healthcare Appointment &amp; Telemedicine System · UML Design Documentation · Rural Nigerian Communities
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#EBF8F8',
+      primaryBorderColor: '#0B7A75',
+      primaryTextColor: '#0D2137',
+      lineColor: '#0D2137',
+      secondaryColor: '#F0F7FA',
+      tertiaryColor: '#FFF8EC',
+      fontFamily: 'DM Sans, sans-serif',
+      fontSize: '14px',
+      classBorder: '#0B7A75',
+      classBackground: '#ffffff',
+      nodeBorder: '#0B7A75',
+      nodeBackground: '#EBF8F8',
+      signalColor: '#0D2137',
+      signalTextColor: '#0D2137',
+      actorBorder: '#0D2137',
+      actorBackground: '#EBF8F8',
+      activationBorderColor: '#0B7A75',
+      activationBkgColor: '#D4F1F0',
+      sequenceNumberColor: '#0D2137',
+      labelBackground: '#F5F9F9',
+      altBackground: '#EBF8F8',
+      stateLabelColor: '#0D2137',
+      stateBackground: '#EBF8F8',
+      transitionColor: '#0D2137',
+    },
+    flowchart: { curve: 'basis', htmlLabels: true },
+    sequence: { actorMargin: 60, messageMargin: 30, mirrorActors: false, width: 150 },
+    classDiagram: { useMaxWidth: false },
+  });
+</script>
+</body>
+</html>
