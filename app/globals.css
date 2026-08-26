@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   SHATS design tokens.
+   These mirror the variables in design/design.pen one-for-one — if a value
+   changes there, change it here and nowhere else.
+   --------------------------------------------------------------------------- */
+@theme {
+  /* Petrol teal: the colour of surgical textiles, chosen because it is the
+     complement of blood red. Blue-leaning, so it never reads as "wellness green". */
+  --color-pine: #0b4a54;
+  --color-pine-mid: #0f7280;
+  --color-pine-wash: #dcedf0;
+
+  --color-ink: #111a1c;
+  --color-ink-soft: #44514f;
+  --color-muted: #77817f;
+
+  --color-paper: #f5f3ee;
+  --color-surface: #ffffff;
+  --color-line: #dedace;
+  --color-line-strong: #c3beb0;
+
+  --color-clay: #c2551f;
+  --color-clay-wash: #f8e7db;
+  --color-amber: #e0a03a;
+
+  --color-alert: #b3261e;
+  --color-alert-wash: #f9e2e0;
+
+  --color-night: #0a1214;
+  --color-night-2: #131e21;
+  --color-night-line: #243237;
+  --color-night-text: #e6edee;
+  --color-night-muted: #869496;
+
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-ui: var(--font-archivo), system-ui, sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+  background: var(--color-paper);
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Patient-facing surfaces are used by people with low literacy and often on
+   cheap screens, so the minimum tap target is deliberately generous. */
+.tap {
+  min-height: 56px;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.75s var(--ease-out-soft) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
+
+/* Fraunces carries an optical-size axis, and Chrome picks a value from the font
+   size: at 64px it chooses the wide text cut and the hero headline runs 929px
+   against its 760px box, wrapping to three lines where the canvas has two.
+   Pencil draws every size from the display cut, so pin the axis to match it —
+   otherwise each headline breaks in a different place than the design. */
+.font-display {
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 96;
+}
