@@ -13,7 +13,7 @@ import {
  *
  * A route handler rather than a page so the cookie is set before anything
  * renders — no flash of a redirect, and no client-side auth state to get out of
- * sync with what middleware sees.
+ * sync with what the proxy sees.
  *
  * When `identity-service` exists this is where its token lands, instead of the
  * fabricated one below.

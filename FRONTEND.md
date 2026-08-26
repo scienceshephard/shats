@@ -130,9 +130,14 @@ matching `api.*` call — the shapes already agree.
 
 `lib/session.ts` holds a **demo session**, not authentication: an unsigned
 base64 payload in an httpOnly cookie with a fabricated token, so the role-based
-routing in `middleware.ts` can be demonstrated. It uses `btoa`/`atob` rather
-than `Buffer` because middleware runs on the Edge runtime, where `Buffer` does
-not exist — and if it throws there, every guarded route silently falls open.
+routing in `proxy.ts` can be demonstrated. It uses `btoa`/`atob` rather than
+`Buffer` because the proxy runs on the Edge runtime, where `Buffer` does not
+exist — and if it throws there, every guarded route silently falls open.
+
+`proxy.ts` is the Next.js 16 name for what used to be `middleware.ts`. It
+imports from `./lib/session` with a relative path rather than the `@/` alias,
+because the Edge bundler that packages this file does not resolve the tsconfig
+path alias.
 
 Replace it with `identity-service` before this is exposed to anyone.
 

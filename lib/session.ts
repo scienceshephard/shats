@@ -1,9 +1,9 @@
 import type { Role } from "./types";
 
 /**
- * The session, kept in a cookie so `middleware.ts` can read it before a page
- * ever renders — localStorage is invisible to middleware, which is why the
- * boundary lives here.
+ * The session, kept in a cookie so `proxy.ts` can read it before a page ever
+ * renders — localStorage is invisible to the proxy, which is why the boundary
+ * lives here.
  *
  * DEMO CAVEAT: the payload is base64 JSON with a fabricated token, and it is
  * not signed. That is fine for a design project with no server, and is exactly
@@ -38,8 +38,8 @@ export const DEMO_USERS: Record<SessionRole, { name: string }> = {
 };
 
 /**
- * base64url via the Web APIs rather than `Buffer`. Middleware runs on the Edge
- * runtime, where `Buffer` does not exist — using it there makes the middleware
+ * base64url via the Web APIs rather than `Buffer`. The proxy runs on the Edge
+ * runtime, where `Buffer` does not exist — using it there makes the proxy
  * throw and every guarded route silently fall open.
  */
 function toBase64Url(value: string): string {

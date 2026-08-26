@@ -7,7 +7,7 @@ import { isRole, type SessionRole } from "@/lib/session";
 /**
  * R1 — Welcome & language. The first screen anyone sees, so it asks one thing.
  *
- * It doubles as the landing spot for anyone middleware turned away: a deep link
+ * It doubles as the landing spot for anyone the proxy turned away: a deep link
  * to a doctor or health-worker screen arrives here with `as` and `next` set, so
  * the way back in is one tap rather than a dead end.
  */

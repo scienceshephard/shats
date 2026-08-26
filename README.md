@@ -78,7 +78,7 @@ SHATS/
 ├── components/                 Shared kit, dialogs, scroll-motion components
 ├── lib/                        API client, domain types, mock data, validation
 ├── public/                     Logos and imagery
-├── middleware.ts               Role-based route guard
+├── proxy.ts                    Role-based route guard
 │
 ├── design/                     The design source of truth
 │   ├── design.pen              Pencil canvas — every screen, dialog and token
