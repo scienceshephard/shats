@@ -1,12 +1,6 @@
 import Link from "next/link";
-import { ProTop } from "@/components/shells";
+import { DoctorTop } from "@/components/shells";
 import { Pill } from "@/components/ui";
-
-const NAV = [
-  { href: "/doctor", label: "Schedule" },
-  { href: "/doctor/patients", label: "My patients", active: true },
-  { href: "/doctor/consultation", label: "Consultation room" },
-];
 
 const PATIENTS = [
   { id: "p-1", name: "Emeka Okafor", shats: "004182", age: 34, sex: "Male", place: "Ede-Oballa, Nsukka", last: "13 Aug 2026", flag: "Penicillin allergy" },
@@ -20,7 +14,7 @@ const PATIENTS = [
 export default function DoctorPatients() {
   return (
     <div className="min-h-screen bg-paper">
-      <ProTop links={NAV} right={<span className="text-sm font-semibold text-ink">Dr. Okonkwo</span>} />
+      <DoctorTop pathname="/doctor/patients" />
 
       <main className="px-7 py-8">
         <h1 className="font-display text-[32px] font-semibold text-ink">My patients</h1>

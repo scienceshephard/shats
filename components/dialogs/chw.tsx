@@ -11,7 +11,7 @@ import {
   DialogStrip,
   DialogTitle,
 } from "../Dialog";
-import { ArrowRight, CheckIcon, PhoneIcon, SirenIcon, StethoscopeIcon } from "../ui";
+import { ArrowRight, CheckIcon, PhoneIcon, SirenIcon, StethoscopeIcon, WifiOffIcon } from "../ui";
 
 /**
  * CP1–CP5 — the health worker's dialogs. These are the only ones written for
@@ -268,7 +268,63 @@ export function CannotReachDialog({ open, onClose, onConfirm }: Props) {
   );
 }
 
-/* CP5 · Records Sent ------------------------------------------------------------ */
+/* CP6 · Go Off Duty? ------------------------------------------------------------ */
+
+/**
+ * Going off duty hands the ward to somebody else, so the dialog has to answer
+ * the three questions that decide whether it is safe: what is still unfinished,
+ * what has not reached the doctor yet, and who is covering.
+ *
+ * The unsent count is the alert, not a footnote. A record still on the phone is
+ * a record the supervising doctor cannot act on.
+ */
+export function GoOffDutyDialog({
+  open,
+  onClose,
+  onConfirm,
+  pending,
+  visitsLeft,
+  cover,
+}: Props & { pending: number; visitsLeft: string; cover: string }) {
+  const id = useId();
+  return (
+    <Dialog open={open} onClose={onClose} labelledBy={id} width={620} padded={false}>
+      <DialogStrip tone="clay" label="Going off duty" />
+      <Body>
+        <DialogTitle id={id} size={26}>
+          Go off duty for today?
+        </DialogTitle>
+        <DialogBody size={15}>
+          Emergencies here will go to another health worker until you are back on duty.
+        </DialogBody>
+        <DialogFacts
+          rows={[
+            ["Visits still to do today", visitsLeft],
+            ["Records still on this phone", `${pending} waiting to send`],
+            ["Open emergency", "None"],
+            ["Who covers for you", cover],
+          ]}
+        />
+        {pending > 0 && (
+          <DialogNote tone="alert" icon={<WifiOffIcon size={18} />}>
+            Your {pending} records have not sent yet. They stay safe on this phone and go by
+            themselves when you reach network — but Dr. Okonkwo cannot see them until then.
+          </DialogNote>
+        )}
+      </Body>
+      <Footer>
+        <DialogActions layout="row">
+          <DialogButton tone="pine" size="sm" onClick={onConfirm ?? onClose}>
+            Go off duty
+          </DialogButton>
+          <DialogButton tone="pine" variant="outline" size="sm" onClick={onClose}>
+            Stay on duty
+          </DialogButton>
+        </DialogActions>
+      </Footer>
+    </Dialog>
+  );
+}
 export function RecordsSentDialog({ open, onClose }: Props) {
   const id = useId();
   return (

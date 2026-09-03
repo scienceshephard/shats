@@ -119,8 +119,15 @@ npm install
 npm run dev        # http://localhost:3000
 ```
 
-Pick a role on `/welcome` — patient, doctor or health worker — and the app
-routes you to that role's home. Other commands:
+The app starts in **development mode**, where every screen is reachable without
+signing in and no form touches the network — so the whole flow can be walked
+end to end with no back end running. Pick a role on `/welcome`, or open any
+route directly: `/home`, `/doctor`, `/chw/visit`.
+
+Set `NEXT_PUBLIC_MODE=production` in `.env.local` to restore the role guards and
+call the gateway. Unset, the mode follows the build. See `lib/mode.ts`.
+
+Other commands:
 
 ```bash
 npm run build      # production build
@@ -230,5 +237,6 @@ form. Where they disagree, the HTML version is authoritative.
 | Build the back end | [`BACKEND.md`](BACKEND.md) |
 | See the API contract | `lib/api.ts` |
 | See the domain model | `lib/types.ts` |
+| Switch between development and production | `lib/mode.ts` |
 | Change a colour, radius or font | `app/globals.css` (mirrors `design.pen`) |
 | Configure service URLs | `.env.example` → `.env.local` |

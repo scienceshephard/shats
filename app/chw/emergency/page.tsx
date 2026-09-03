@@ -1,15 +1,8 @@
 import Link from "next/link";
-import { ProTop } from "@/components/shells";
+import { ChwTop } from "@/components/shells";
 import { CheckIcon, Pill, SirenIcon, WifiOffIcon } from "@/components/ui";
-import { activeEmergency } from "@/lib/mock";
+import { activeEmergency, pendingSync } from "@/lib/mock";
 import { EmergencyCaseTriggers } from "@/components/dialogs/pro-triggers";
-
-const NAV = [
-  { href: "/chw", label: "Today's rounds" },
-  { href: "/chw/register", label: "Register a patient" },
-  { href: "/chw/visit", label: "Record a visit" },
-  { href: "/chw/emergency", label: "Emergency", active: true },
-];
 
 const OUTCOMES = [
   { id: "REFERRED_TO_FACILITY", label: "Referred to a facility", sub: "I sent them on, or went with them", on: true },
@@ -26,7 +19,7 @@ export default function ChwEmergency() {
 
   return (
     <div className="min-h-screen bg-paper">
-      <ProTop links={NAV} badge="Health worker" right={<span className="text-sm font-semibold text-ink">Ngozi Eze</span>} />
+      <ChwTop pathname="/chw/emergency" pending={pendingSync.total} />
 
       {/* The countdown makes the escalation ladder visible: if she cannot go,
           the case moves on rather than silently stalling. */}

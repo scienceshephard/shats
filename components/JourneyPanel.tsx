@@ -124,7 +124,7 @@ export function JourneyPanel({
         ref={panel}
         className="lg:sticky lg:top-0 lg:flex lg:h-[100svh] lg:items-center"
       >
-        <div className="mx-auto grid w-full max-w-[min(1920px,92vw)] items-center gap-12 px-6 py-20 sm:px-[72px] lg:grid-cols-2 lg:gap-[clamp(48px,4vw,80px)] lg:py-0">
+        <div className="mx-auto grid w-full max-w-[min(1920px,92vw)] items-center gap-9 px-6 py-12 sm:gap-12 sm:px-[72px] sm:py-20 lg:grid-cols-2 lg:gap-[clamp(48px,4vw,80px)] lg:py-0">
           <div ref={textEl} className={flip ? "lg:order-2" : ""}>
             {text}
           </div>

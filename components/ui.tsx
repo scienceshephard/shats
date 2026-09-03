@@ -380,3 +380,122 @@ export const HospitalIcon = ({ size = 21 }: { size?: number }) => (
     <path d="M9.5 21v-4h5v4" />
   </svg>
 );
+
+export const PencilIcon = ({ size = 15 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <path d="M17 3a2.8 2.8 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+    <path d="m15 5 4 4" />
+  </svg>
+);
+
+export const LogOutIcon = ({ size = 16 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <path d="m16 17 5-5-5-5" />
+    <path d="M21 12H9" />
+  </svg>
+);
+
+export const CalendarIcon = ({ size = 15 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <rect x="3" y="5" width="18" height="16" rx="2" />
+    <path d="M3 10h18M8 3v4M16 3v4" />
+  </svg>
+);
+
+export const DownloadIcon = ({ size = 15 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <path d="M12 3v12" />
+    <path d="m7 11 5 5 5-5" />
+    <path d="M4 20h16" />
+  </svg>
+);
+
+export const PlusIcon = ({ size = 15 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <path d="M12 5v14M5 12h14" />
+  </svg>
+);
+
+export const SearchIcon = ({ size = 15 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-4.5-4.5" />
+  </svg>
+);
+
+export const BankIcon = ({ size = 15 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <path d="M3 10 12 4l9 6" />
+    <path d="M5 10v9M19 10v9M9.5 10v9M14.5 10v9" />
+    <path d="M3 21h18" />
+  </svg>
+);
+
+export const VideoIcon = ({ size = 16 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <rect x="2" y="6" width="13" height="12" rx="2" />
+    <path d="m15 11 7-4v10l-7-4Z" />
+  </svg>
+);
+
+export const WarningIcon = ({ size = 15 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <path d="M10.3 3.6 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.6a2 2 0 0 0-3.4 0Z" />
+    <path d="M12 9v4M12 17h.01" />
+  </svg>
+);
+
+export const TimerIcon = ({ size = 14 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <circle cx="12" cy="13" r="8" />
+    <path d="M12 9.5V13l2.5 1.5" />
+    <path d="M9 2h6" />
+  </svg>
+);
+
+export const ActivityIcon = ({ size = 15 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <path d="M3 12h4l2.5-7 4 14L16 12h5" />
+  </svg>
+);
+
+export const ThermometerIcon = ({ size = 15 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <path d="M14 14.8V4.5a2.5 2.5 0 0 0-5 0v10.3a4 4 0 1 0 5 0Z" />
+  </svg>
+);
+
+export const BatteryIcon = ({ size = 15 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <rect x="2" y="8" width="17" height="9" rx="2" />
+    <path d="M22 11v3" />
+    <path d="M5 11v3M8.5 11v3" />
+  </svg>
+);
+
+export const UserPlusIcon = ({ size = 15 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <path d="M15 20v-1.5a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V20" />
+    <circle cx="8.5" cy="7" r="3.5" />
+    <path d="M18 8v6M15 11h6" />
+  </svg>
+);
+
+export const MoonIcon = ({ size = 18 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" />
+  </svg>
+);
+
+export const NavigationIcon = ({ size = 14 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <path d="M3 11 21 3l-8 18-2-7Z" />
+  </svg>
+);
+
+export const ChevronDownIcon = ({ size = 13 }: { size?: number }) => (
+  <svg {...iconBase} width={size} height={size} aria-hidden>
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+);

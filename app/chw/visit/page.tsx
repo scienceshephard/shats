@@ -1,20 +1,14 @@
 import Link from "next/link";
-import { ProTop } from "@/components/shells";
+import { ChwTop } from "@/components/shells";
+import { pendingSync } from "@/lib/mock";
 
 import { VisitForm } from "./VisitForm";
-
-const NAV = [
-  { href: "/chw", label: "Today's rounds" },
-  { href: "/chw/register", label: "Register a patient" },
-  { href: "/chw/visit", label: "Record a visit", active: true },
-  { href: "/chw/emergency", label: "Emergency" },
-];
 
 /** C3 — Record a home visit, including the automatic escalation check. */
 export default function ChwVisit() {
   return (
     <div className="min-h-screen bg-paper">
-      <ProTop links={NAV} badge="Health worker" right={<span className="text-sm font-semibold text-ink">Ngozi Eze</span>} />
+      <ChwTop pathname="/chw/visit" pending={pendingSync.total} />
 
       <main className="mx-auto w-full max-w-[760px] px-7 py-8">
         <Link href="/chw" className="text-sm text-ink-soft hover:text-ink">

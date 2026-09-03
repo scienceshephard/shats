@@ -69,6 +69,7 @@ export function SendEmergencyTrigger() {
 /* /booked · POP6 ------------------------------------------------------------ */
 export function CancelVisitTrigger() {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   return (
     <>
       <button
@@ -77,7 +78,13 @@ export function CancelVisitTrigger() {
       >
         Cancel this visit
       </button>
-      <CancelVisitDialog open={open} onClose={() => setOpen(false)} />
+      <CancelVisitDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        // Cancelling leaves nothing on this screen to look at — the visit it
+        // describes is gone — so it returns to the hub.
+        onConfirm={() => router.push("/home")}
+      />
     </>
   );
 }
@@ -85,6 +92,7 @@ export function CancelVisitTrigger() {
 /* /home · POP1 -------------------------------------------------------------- */
 export function DoctorReadyBanner() {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   return (
     <>
       <button
@@ -104,7 +112,13 @@ export function DoctorReadyBanner() {
           <ArrowRight size={20} />
         </span>
       </button>
-      <DoctorReadyDialog open={open} onClose={() => setOpen(false)} />
+      <DoctorReadyDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        // "Join now" has to actually join, or the dialog is a dead end on the
+        // one screen where the patient is being called into a consultation.
+        onConfirm={() => router.push("/consultation")}
+      />
     </>
   );
 }

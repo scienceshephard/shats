@@ -1,15 +1,8 @@
 import Link from "next/link";
-import { ProTop } from "@/components/shells";
+import { ChwTop } from "@/components/shells";
 import { ArrowRight, CheckIcon, Pill, SirenIcon, WifiOffIcon } from "@/components/ui";
-import { chwPatients, chwRounds } from "@/lib/mock";
+import { chwPatients, chwRounds, pendingSync } from "@/lib/mock";
 import { RoundsTriggers } from "@/components/dialogs/pro-triggers";
-
-const NAV = [
-  { href: "/chw", label: "Today's rounds", active: true },
-  { href: "/chw/register", label: "Register a patient" },
-  { href: "/chw/visit", label: "Record a visit" },
-  { href: "/chw/emergency", label: "Emergency" },
-];
 
 const timeLabel = (iso: string) =>
   new Date(iso).toLocaleTimeString("en-NG", { hour: "2-digit", minute: "2-digit", hour12: false });
@@ -25,18 +18,7 @@ export default function ChwRounds() {
 
   return (
     <div className="min-h-screen bg-paper">
-      <ProTop
-        links={NAV}
-        badge="Health worker"
-        right={
-          <span className="flex items-center gap-2.5 text-sm font-semibold text-ink">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-pine text-xs text-white">
-              NE
-            </span>
-            Ngozi Eze
-          </span>
-        }
-      />
+      <ChwTop pathname="/chw" pending={pendingSync.total} />
 
       <main className="px-7 py-8">
         {pending > 0 && (

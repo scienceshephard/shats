@@ -1,14 +1,8 @@
 import Link from "next/link";
-import { ProTop } from "@/components/shells";
+import { ChwTop } from "@/components/shells";
+import { pendingSync } from "@/lib/mock";
 import { WifiOffIcon } from "@/components/ui";
 import { RegisterPatientForm } from "./RegisterPatientForm";
-
-const NAV = [
-  { href: "/chw", label: "Today's rounds" },
-  { href: "/chw/register", label: "Register a patient", active: true },
-  { href: "/chw/visit", label: "Record a visit" },
-  { href: "/chw/emergency", label: "Emergency" },
-];
 
 /**
  * C2 — Register a patient in the field.
@@ -19,7 +13,7 @@ const NAV = [
 export default function ChwRegister() {
   return (
     <div className="min-h-screen bg-paper">
-      <ProTop links={NAV} badge="Health worker" right={<span className="text-sm font-semibold text-ink">Ngozi Eze</span>} />
+      <ChwTop pathname="/chw/register" pending={pendingSync.total} />
 
       <main className="mx-auto w-full max-w-[760px] px-7 py-8">
         <h1 className="font-display text-[32px] font-semibold text-ink">Register a patient</h1>

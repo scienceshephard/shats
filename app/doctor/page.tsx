@@ -1,14 +1,8 @@
 import Link from "next/link";
-import { ProTop } from "@/components/shells";
+import { DoctorTop } from "@/components/shells";
 import { ArrowRight, Pill, SirenIcon } from "@/components/ui";
 import { doctorSchedule, naira } from "@/lib/mock";
 import { AcceptingPatientsToggle, EscalationActions } from "@/components/dialogs/pro-triggers";
-
-const NAV = [
-  { href: "/doctor", label: "Schedule", active: true },
-  { href: "/doctor/patients", label: "My patients" },
-  { href: "/doctor/consultation", label: "Consultation room" },
-];
 
 const statusTone = {
   "In session": "pine",
@@ -25,25 +19,7 @@ const statusTone = {
 export default function DoctorSchedule() {
   return (
     <div className="min-h-screen bg-paper">
-      <ProTop
-        links={NAV}
-        right={
-          <>
-            <span className="inline-flex items-center gap-2 rounded-full border border-alert px-3.5 py-1.5 text-xs font-semibold text-alert">
-              <SirenIcon size={14} /> Emergency
-            </span>
-            <span className="rounded-full border border-line px-3 py-1.5 text-xs font-semibold text-ink-soft">
-              English
-            </span>
-            <span className="flex items-center gap-2.5 text-sm font-semibold text-ink">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-pine text-xs text-white">
-                CO
-              </span>
-              Dr. Okonkwo
-            </span>
-          </>
-        }
-      />
+      <DoctorTop pathname="/doctor" />
 
       <main className="px-7 py-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
@@ -57,7 +33,7 @@ export default function DoctorSchedule() {
         </div>
 
         <div className="mt-7 grid gap-4 lg:grid-cols-[1fr_360px]">
-          <div>
+          <div className="min-w-0">
             {/* Metric strip — the one waiting now is highlighted because it is
                 the only number that demands an action right this minute. */}
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

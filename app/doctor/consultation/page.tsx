@@ -17,6 +17,11 @@ import {
  */
 export default function DoctorConsultation() {
   const [dialog, setDialog] = useState<null | "end" | "conflict" | "no-show">(null);
+  // Call controls are toggles, so they have to show their own state — a mute
+  // button that looks identical muted and unmuted is worse than none.
+  const [muted, setMuted] = useState(false);
+  const [cameraOff, setCameraOff] = useState(true);
+  const [chwInvited, setChwInvited] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-night">
@@ -41,14 +46,32 @@ export default function DoctorConsultation() {
         </div>
 
         <div className="mt-5 flex flex-wrap gap-3">
-          <button className="rounded-full bg-white/10 px-6 py-3 text-sm font-semibold text-white">
-            Mute
+          <button
+            onClick={() => setMuted((m) => !m)}
+            aria-pressed={muted}
+            className={`selectable ${muted ? "selectable-on" : ""} rounded-full px-6 py-3 text-sm font-semibold ${
+              muted ? "bg-amber text-[#2A1D08]" : "bg-white/10 text-white hover:bg-white/20"
+            }`}
+          >
+            {muted ? "Unmute" : "Mute"}
           </button>
-          <button className="rounded-full bg-white/10 px-6 py-3 text-sm font-semibold text-white">
-            Camera
+          <button
+            onClick={() => setCameraOff((c) => !c)}
+            aria-pressed={cameraOff}
+            className={`selectable ${cameraOff ? "selectable-on" : ""} rounded-full px-6 py-3 text-sm font-semibold ${
+              cameraOff ? "bg-amber text-[#2A1D08]" : "bg-white/10 text-white hover:bg-white/20"
+            }`}
+          >
+            {cameraOff ? "Camera off" : "Camera on"}
           </button>
-          <button className="rounded-full bg-white/10 px-6 py-3 text-sm font-semibold text-white">
-            Invite the health worker
+          <button
+            onClick={() => setChwInvited((c) => !c)}
+            aria-pressed={chwInvited}
+            className={`selectable ${chwInvited ? "selectable-on" : ""} rounded-full px-6 py-3 text-sm font-semibold ${
+              chwInvited ? "bg-pine text-white" : "bg-white/10 text-white hover:bg-white/20"
+            }`}
+          >
+            {chwInvited ? "Health worker invited" : "Invite the health worker"}
           </button>
           <button
             onClick={() => setDialog("no-show")}

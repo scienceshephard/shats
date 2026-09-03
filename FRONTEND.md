@@ -11,7 +11,7 @@ React 19, Tailwind v4, TypeScript.
 ```bash
 npm install
 npm run dev      # http://localhost:3000
-npm run build
+npm run buildwww.shats
 ```
 
 ## Routes
@@ -94,9 +94,11 @@ Tailwind v4 emits its `@theme` tokens on `:root` — declared any lower, the
 Everything crosses the network through **`lib/api.ts`**. Nothing else calls
 `fetch`, so that one file is the whole contract.
 
-**1. Point at the gateway.** Copy `.env.example` to `.env.local`. Each service
-reads its own variable and falls back to `NEXT_PUBLIC_API_GATEWAY`, so you can
-split services out one at a time without touching code.
+**1. Point at the gateway.** Copy `.env.example` to `.env.local` and set
+`NEXT_PUBLIC_MODE=production` — nothing goes over the network while the mode is
+`development`, whatever the gateway is set to. Each service reads its own
+variable and falls back to `NEXT_PUBLIC_API_GATEWAY`, so you can split services
+out one at a time without touching code.
 
 **2. Check the routes against your controllers.** `API_ROUTES` in `lib/api.ts`
 is a flat manifest of every path the client calls, grouped by service. Diff it
@@ -125,6 +127,34 @@ See [`BACKEND.md`](BACKEND.md) for the full service specification.
 Pages read from `lib/mock.ts`. Both it and the API client are typed against
 `lib/types.ts`, so going live is a matter of replacing a mock import with the
 matching `api.*` call — the shapes already agree.
+
+## Development mode
+
+`NEXT_PUBLIC_MODE` decides whether the app is a walkable prototype or a client
+for the back end. It is read in one place, `lib/mode.ts`.
+
+| Mode | Route guards | Forms |
+| --- | --- | --- |
+| `development` | Off — every screen opens without signing in | Sample data, no network |
+| `production` | On — `proxy.ts` enforces the role each route needs | Call the gateway |
+
+Unset, it follows the build: `npm run dev` is development, `npm run build` is
+production. So the project runs with no configuration, and a deploy never falls
+open because nobody set a variable.
+
+Development mode is for walking the flow end to end. Open any URL directly —
+`/doctor`, `/chw/visit`, `/pay` — without signing in as each role in turn. Forms
+still validate, still show their pending state, and still open the dialog they
+are supposed to; they just do not send anything.
+
+To check the guards behave, run production mode against no back end:
+
+```bash
+NEXT_PUBLIC_MODE=production npm run dev
+```
+
+`/home`, `/doctor` and `/chw` should each redirect to `/welcome`, and `/learn`
+should stay open — it is public by design.
 
 ## Authentication today
 

@@ -1,13 +1,7 @@
 import Link from "next/link";
-import { ProTop } from "@/components/shells";
+import { DoctorTop } from "@/components/shells";
 import { Pill } from "@/components/ui";
 import { currentPatient, vitalsHistory } from "@/lib/mock";
-
-const NAV = [
-  { href: "/doctor", label: "Schedule" },
-  { href: "/doctor/patients", label: "My patients", active: true },
-  { href: "/doctor/consultation", label: "Consultation room" },
-];
 
 const HISTORY = [
   { date: "13 Aug 2026", title: "Malaria — confirmed by RDT", by: "Dr. C. Okonkwo", note: "Coartem 1 tab BD ×3 days. Advised to complete the course." },
@@ -25,7 +19,7 @@ export default async function PatientRecord({
 
   return (
     <div className="min-h-screen bg-paper">
-      <ProTop links={NAV} right={<span className="text-sm font-semibold text-ink">Dr. Okonkwo</span>} />
+      <DoctorTop pathname="/doctor/patients" />
 
       <main className="px-7 py-8">
         <Link href="/doctor/patients" className="text-sm text-ink-soft hover:text-ink">

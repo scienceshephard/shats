@@ -1,16 +1,21 @@
 import { ApiError } from "./api";
+import { IS_PRODUCTION } from "./mode";
 
 /**
- * Routes a form submission to the back end, or to a stand-in when no gateway is
- * configured.
+ * Routes a form submission to the back end, or to a stand-in when there is no
+ * back end to route it to.
  *
  * The demo path exists so the project runs and can be shown with nothing else
  * running. It is deliberately a separate argument rather than a mock baked into
  * `lib/api.ts`: that file is the contract with the Spring services and should
- * stay free of pretend behaviour. Set NEXT_PUBLIC_API_GATEWAY and every call
- * here goes live with no other change.
+ * stay free of pretend behaviour.
+ *
+ * Two things have to be true before a real call is made: the app is in
+ * production mode, and a gateway is configured. Requiring the mode as well as
+ * the URL is what lets `.env.example` ship a gateway address without every form
+ * in development mode trying to reach it and waiting out the 15s timeout.
  */
-export const IS_LIVE = Boolean(process.env.NEXT_PUBLIC_API_GATEWAY);
+export const IS_LIVE = IS_PRODUCTION && Boolean(process.env.NEXT_PUBLIC_API_GATEWAY);
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

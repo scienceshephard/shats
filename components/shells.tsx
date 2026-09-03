@@ -1,6 +1,14 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowRight, HeartIcon, Logo, PillIcon, SirenIcon, StethoscopeIcon } from "./ui";
+import {
+  ArrowRight,
+  HeartIcon,
+  Logo,
+  PillIcon,
+  SirenIcon,
+  StethoscopeIcon,
+  WifiOffIcon,
+} from "./ui";
 
 /* -------------------------------------------------------------------------- */
 /* Patient shell                                                               */
@@ -171,5 +179,104 @@ export function ProTop({
       </div>
       <div className="flex items-center gap-3">{right}</div>
     </header>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Role headers                                                                */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The doctor's header, in one place rather than repeated on eight screens.
+ *
+ * `active` is matched by prefix so `/doctor/patients/p-2` still lights up
+ * "My patients", and the longest match wins — otherwise `/doctor` would claim
+ * every route beneath it.
+ */
+const DOCTOR_NAV = [
+  { href: "/doctor", label: "Schedule" },
+  { href: "/doctor/patients", label: "My patients" },
+  { href: "/doctor/prescriptions", label: "Prescriptions" },
+  { href: "/doctor/earnings", label: "Earnings" },
+];
+
+function activeHref(nav: { href: string }[], pathname: string): string | null {
+  const hits = nav.filter((n) => pathname === n.href || pathname.startsWith(n.href + "/"));
+  return hits.sort((a, b) => b.href.length - a.href.length)[0]?.href ?? null;
+}
+
+export function DoctorTop({ pathname }: { pathname: string }) {
+  const current = activeHref(DOCTOR_NAV, pathname);
+  return (
+    <ProTop
+      links={DOCTOR_NAV.map((l) => ({ ...l, active: l.href === current }))}
+      right={
+        <>
+          <Link
+            href="/doctor/emergency"
+            className="inline-flex items-center gap-2 rounded-full border border-alert px-3.5 py-1.5 text-xs font-semibold text-alert transition-colors hover:bg-alert hover:text-white"
+          >
+            <SirenIcon size={14} /> Emergency
+          </Link>
+          <span className="rounded-full border border-line px-3 py-1.5 text-xs font-semibold text-ink-soft">
+            English
+          </span>
+          {/* The avatar is the way into the profile, as the canvas draws it. */}
+          <Link
+            href="/doctor/profile"
+            className="flex items-center gap-2.5 text-sm font-semibold text-ink"
+          >
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-pine text-xs text-white">
+              CO
+            </span>
+            Dr. Okonkwo
+          </Link>
+        </>
+      }
+    />
+  );
+}
+
+/**
+ * The health worker's header. Carries the two things a CHW has to be able to
+ * read without asking for them: how much unsent work is on the phone, and how
+ * much battery is left to send it with.
+ */
+const CHW_NAV = [
+  { href: "/chw", label: "Today's rounds" },
+  { href: "/chw/register", label: "Register a patient" },
+  { href: "/chw/visit", label: "Record a visit" },
+  { href: "/chw/alerts", label: "Alerts" },
+  { href: "/chw/reports", label: "Reports" },
+];
+
+export function ChwTop({ pathname, pending = 0 }: { pathname: string; pending?: number }) {
+  const current = activeHref(CHW_NAV, pathname);
+  return (
+    <ProTop
+      links={CHW_NAV.map((l) => ({ ...l, active: l.href === current }))}
+      badge="Health worker"
+      right={
+        <>
+          {pending > 0 && (
+            <span className="inline-flex items-center gap-2 rounded-full bg-[#3A2A16] px-3 py-1.5 text-xs font-semibold text-amber">
+              <WifiOffIcon size={13} /> {pending} waiting to sync
+            </span>
+          )}
+          <span className="rounded-full border border-line px-3 py-1.5 text-xs font-semibold text-ink-soft">
+            64% · solar
+          </span>
+          <Link
+            href="/chw/profile"
+            className="flex items-center gap-2.5 text-sm font-semibold text-ink"
+          >
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-clay text-xs text-white">
+              BU
+            </span>
+            Blessing U.
+          </Link>
+        </>
+      }
+    />
   );
 }

@@ -1,11 +1,31 @@
 import { PatientPage } from "@/components/shells";
 import { CheckIcon, ListenButton, PhoneIcon } from "@/components/ui";
-import { naira } from "@/lib/mock";
+import { doctors, naira } from "@/lib/mock";
 import { PayForm } from "./PayForm";
 
+const DAY_LABEL: Record<string, string> = {
+  today: "today",
+  tomorrow: "tomorrow",
+  friday: "on Friday",
+};
+
 /** R8 — Pay. The total is stated before any method is chosen. */
-export default function Pay() {
-  const fee = 150_000;
+export default async function Pay({
+  searchParams,
+}: {
+  searchParams: Promise<{ doctor?: string; day?: string; at?: string }>;
+}) {
+  const { doctor, day, at } = await searchParams;
+  // The doctor chosen on R6 sets the fee — the whole promise of this screen is
+  // that the price shown is the price agreed, so it cannot be a fixed number.
+  const chosen = doctors.find((d) => d.id === doctor) ?? doctors[0];
+  const fee = chosen.feeKobo;
+  const when = `${DAY_LABEL[day ?? "today"] ?? "today"} at ${at ?? "10:00"}`;
+
+  const forward = new URLSearchParams();
+  if (doctor) forward.set("doctor", doctor);
+  if (day) forward.set("day", day);
+  if (at) forward.set("at", at);
 
   return (
     <PatientPage showGoNext={false}>
@@ -20,7 +40,7 @@ export default function Pay() {
           {naira(fee)}
         </p>
         <p className="mt-3 text-[15px] text-ink-soft">
-          Dr. Chidi Okonkwo · today at 10:00 · by video
+          {chosen.fullName} · {when} · by video
         </p>
         <p className="mt-4 flex items-start gap-2.5 text-[14.5px] text-ink-soft">
           <span className="mt-0.5 text-pine">
@@ -31,7 +51,7 @@ export default function Pay() {
         </p>
       </section>
 
-      <PayForm fee={fee} />
+      <PayForm fee={fee} forward={forward.toString()} />
 
       <div className="mt-6 rounded-[12px] border border-line bg-surface p-5">
         <p className="flex items-center gap-2.5 text-[15px] font-semibold text-ink">

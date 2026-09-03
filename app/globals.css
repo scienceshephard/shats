@@ -91,3 +91,62 @@ body {
   font-optical-sizing: none;
   font-variation-settings: "opsz" 96;
 }
+
+/* ---------------------------------------------------------------------------
+   Selection motion.
+
+   Every option group — languages, symptoms, doctors, days, time slots — shares
+   this, so selecting anything anywhere feels the same. Declared once here
+   rather than per screen: one place to change the timing, one place it turns
+   off under reduced motion.
+   --------------------------------------------------------------------------- */
+.selectable {
+  /* Only the properties that actually change. `all` would sweep in layout
+     properties and animate things like width when the grid reflows. */
+  transition:
+    background-color 220ms var(--ease-out-soft),
+    border-color 220ms var(--ease-out-soft),
+    color 220ms var(--ease-out-soft),
+    transform 220ms var(--ease-out-soft),
+    box-shadow 220ms var(--ease-out-soft);
+}
+
+/* The border is always 2px and usually transparent, so selecting one changes
+   the colour and never the box. Animating `border-width` instead would shift
+   every neighbour by a pixel as the transition ran. */
+.selectable-on {
+  transform: scale(1.015);
+}
+
+.selectable:active {
+  transform: scale(0.995);
+}
+
+/* The check mark inside a selected option: grows in rather than appearing. */
+.selectable-mark {
+  transition:
+    transform 220ms var(--ease-out-soft),
+    opacity 220ms var(--ease-out-soft);
+}
+
+.selectable-mark-off {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.selectable-mark-on {
+  transform: scale(1);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .selectable,
+  .selectable-mark {
+    transition: none;
+  }
+
+  .selectable-on,
+  .selectable:active {
+    transform: none;
+  }
+}

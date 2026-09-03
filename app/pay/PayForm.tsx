@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { submit, describeFailure } from "@/lib/submit";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { submit, describeFailure, IS_LIVE } from "@/lib/submit";
 import { api } from "@/lib/api";
 import { ErrorState } from "@/components/states";
 import { ApproveOnPhoneDialog, PaymentFailedDialog } from "@/components/dialogs/patient";
@@ -29,11 +30,27 @@ type MethodId = (typeof METHODS)[number]["id"];
  * approval entirely — it is the one route that never touches the network, which
  * is the point of offering it.
  */
-export function PayForm({ fee }: { fee: number }) {
+export function PayForm({ fee, forward = "" }: { fee: number; forward?: string }) {
+  const router = useRouter();
+  const booked = forward ? `/booked?${forward}` : "/booked";
   const [method, setMethod] = useState<MethodId | null>("MOMO");
   const [dialog, setDialog] = useState<null | "approve" | "failed">(null);
   const [failure, setFailure] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+
+  /**
+   * A wallet payment finishes when the provider tells `payment-service` the PIN
+   * was accepted, and the booking is confirmed from there. With no back end
+   * there is no callback to wait for, so it is simulated: POP3 shows exactly as
+   * drawn, then the flow carries on to the booked screen the way it will when
+   * that callback is real. Without this the wallet methods dead-end on the
+   * dialog and only cash reaches `/booked`.
+   */
+  useEffect(() => {
+    if (dialog !== "approve" || IS_LIVE) return;
+    const approved = setTimeout(() => router.push(booked), 2600);
+    return () => clearTimeout(approved);
+  }, [dialog, router, booked]);
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -48,8 +65,13 @@ export function PayForm({ fee }: { fee: number }) {
         () => api.payments.methods(),
         () => ({ ok: true }),
       );
-      setDialog(method === "CASH" ? null : "approve");
-      if (method === "CASH") window.location.href = "/booked";
+      // Cash never touches the network — that is the point of offering it — so
+      // it skips the wallet approval and books straight away.
+      if (method === "CASH") {
+        router.push(booked);
+        return;
+      }
+      setDialog("approve");
     } catch (error) {
       setFailure(describeFailure(error).message);
     } finally {
@@ -67,8 +89,8 @@ export function PayForm({ fee }: { fee: number }) {
             return (
               <li key={m.id}>
                 <label
-                  className={`flex min-h-[84px] w-full cursor-pointer items-center gap-4 rounded-[12px] border px-5 text-left ${
-                    on ? "border-2 border-pine bg-surface" : "border-line bg-surface"
+                  className={`selectable ${on ? "selectable-on" : ""} flex min-h-[84px] w-full cursor-pointer items-center gap-4 rounded-[12px] border-2 px-5 text-left ${
+                    on ? "border-pine bg-pine-wash" : "border-line bg-surface hover:border-line-strong"
                   }`}
                 >
                   <input
@@ -83,11 +105,15 @@ export function PayForm({ fee }: { fee: number }) {
                   />
                   <span
                     aria-hidden
-                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 ${
+                    className={`selectable flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 ${
                       on ? "border-pine bg-pine text-white" : "border-line-strong"
                     }`}
                   >
-                    {on && <CheckIcon size={14} />}
+                    <span
+                      className={`selectable-mark ${on ? "selectable-mark-on" : "selectable-mark-off"}`}
+                    >
+                      <CheckIcon size={14} />
+                    </span>
                   </span>
                   <span>
                     <span className="block text-[18px] font-semibold text-ink">{m.name}</span>

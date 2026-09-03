@@ -142,10 +142,10 @@ export function RegisterPatientForm() {
                   type="button"
                   onClick={() => set("sex")(s)}
                   aria-pressed={values.sex === s}
-                  className={`flex-1 rounded-[10px] border py-3 text-sm font-semibold ${
+                  className={`selectable ${values.sex === s ? "selectable-on" : ""} flex-1 rounded-[10px] border-2 py-3 text-sm font-semibold ${
                     values.sex === s
-                      ? "border-2 border-pine bg-pine-wash text-pine"
-                      : "border-line-strong text-ink"
+                      ? "border-pine bg-pine-wash text-pine"
+                      : "border-line-strong text-ink hover:border-pine"
                   }`}
                 >
                   {s === "FEMALE" ? "Female" : "Male"}

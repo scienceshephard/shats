@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from "../Dialog";
 import { ArrowRight, CheckIcon, PhoneIcon, SirenIcon, StethoscopeIcon } from "../ui";
+import { naira } from "@/lib/mock";
 
 /**
  * DP1–DP5 — the doctor's interruptions. Denser than the patient dialogs and
@@ -214,7 +215,66 @@ export function PatientNotJoinedDialog({ open, onClose, onConfirm }: Props) {
   );
 }
 
-/* DP5 · Stop Accepting Patients? ---------------------------------------------- */
+/* DP6 · Change Your Fee -------------------------------------------------------- */
+
+/**
+ * The fee is the only profile field a patient is quoted before they commit, so
+ * changing it gets a dialog rather than an inline edit. Two things have to be on
+ * screen before anyone presses save: what the doctor actually keeps once the
+ * platform fee is taken, and the fact that today's booked patients still pay the
+ * old price.
+ */
+export function ChangeFeeDialog({
+  open,
+  onClose,
+  onConfirm,
+  fromKobo,
+  toKobo,
+  feePercent,
+  bookedToday,
+}: Props & {
+  fromKobo: number;
+  toKobo: number;
+  feePercent: number;
+  bookedToday: number;
+}) {
+  const id = useId();
+  const keep = toKobo - Math.round((toKobo * feePercent) / 100);
+  return (
+    <Dialog open={open} onClose={onClose} labelledBy={id} width={620} padded={false}>
+      <Body>
+        <DialogTitle id={id} size={26}>
+          Change your consultation fee?
+        </DialogTitle>
+        <DialogBody size={15}>
+          Patients see this price before they book, and it is the whole price — nothing is added at
+          the end.
+        </DialogBody>
+        <DialogFacts
+          rows={[
+            ["Your fee now", naira(fromKobo)],
+            ["New fee", naira(toKobo)],
+            [`You keep, after SHATS takes ${feePercent}%`, `${naira(keep)} per consultation`],
+          ]}
+        />
+        <DialogNote tone="clay">
+          The {bookedToday} patients already booked today still pay {naira(fromKobo)}. The new price
+          starts with the next booking.
+        </DialogNote>
+      </Body>
+      <Footer>
+        <DialogActions layout="row">
+          <DialogButton tone="pine" size="sm" onClick={onConfirm ?? onClose}>
+            Save new fee
+          </DialogButton>
+          <DialogButton tone="pine" variant="outline" size="sm" onClick={onClose}>
+            Keep {naira(fromKobo)}
+          </DialogButton>
+        </DialogActions>
+      </Footer>
+    </Dialog>
+  );
+}
 export function StopAcceptingDialog({ open, onClose, onConfirm }: Props) {
   const id = useId();
   return (

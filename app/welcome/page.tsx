@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckIcon, Logo, SpeakerIcon } from "@/components/ui";
-import { LANGUAGES } from "@/lib/types";
+import { ArrowRight, Logo } from "@/components/ui";
+import { LanguagePicker } from "./LanguagePicker";
 import { isRole, type SessionRole } from "@/lib/session";
 
 /**
@@ -46,54 +46,7 @@ export default async function Welcome({
           Tap the one you understand best. You can change it later.
         </p>
 
-        <ul className="mt-8 space-y-3">
-          {LANGUAGES.map((lang) => {
-            const selected = lang.code === "ig";
-            return (
-              <li key={lang.code}>
-                <button
-                  className={`tap flex w-full items-center gap-4 rounded-[12px] border px-5 text-left transition-colors ${
-                    selected
-                      ? "border-pine bg-pine text-white"
-                      : "border-line bg-surface hover:border-line-strong"
-                  }`}
-                >
-                  <span
-                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 ${
-                      selected ? "border-white bg-white text-pine" : "border-line-strong"
-                    }`}
-                  >
-                    {selected && <CheckIcon size={14} />}
-                  </span>
-                  <span className="flex-1 py-4">
-                    <span className="block font-display text-[19px] font-semibold">
-                      {lang.label}
-                    </span>
-                    <span
-                      className={`block text-[13px] ${selected ? "text-white/70" : "text-muted"}`}
-                    >
-                      {lang.english}
-                    </span>
-                  </span>
-                  <span
-                    className={`flex h-10 w-10 items-center justify-center rounded-full ${
-                      selected ? "bg-amber text-ink" : "bg-paper text-ink-soft"
-                    }`}
-                  >
-                    <SpeakerIcon />
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-
-        <Link
-          href="/register"
-          className="tap mt-8 flex w-full items-center justify-center gap-3 rounded-full bg-amber text-[18px] font-semibold text-ink"
-        >
-          Continue in Igbo <ArrowRight />
-        </Link>
+        <LanguagePicker />
 
         {wanted && wanted !== "PATIENT" && (
           <div className="mt-8 rounded-[12px] border border-line bg-surface p-5">

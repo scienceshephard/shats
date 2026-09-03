@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { ROLE_HOME, SESSION_COOKIE, decodeSession, type SessionRole } from "./lib/session";
+import { IS_DEVELOPMENT } from "./lib/mode";
 
 /**
  * The auth boundary. Runs before a protected page renders, so a signed-out
@@ -8,8 +9,12 @@ import { ROLE_HOME, SESSION_COOKIE, decodeSession, type SessionRole } from "./li
  * Anything not listed here is public: the landing page, sign-up, and the health
  * library, which is deliberately readable without an account.
  *
+ * In development mode the whole boundary is skipped, so the flow can be walked
+ * end to end — patient, doctor and health worker — without signing in as each
+ * one in turn. See `lib/mode.ts`.
+ *
  * Named `proxy.ts` rather than `middleware.ts`: Next.js 16 renamed the
- * convention, and the old name is deprecated. The import below is relative
+ * convention, and the old name is deprecated. The imports below are relative
  * rather than the `@/` alias on purpose — this file is bundled as an Edge
  * function, and that bundler does not resolve the tsconfig path alias.
  */
@@ -33,6 +38,9 @@ const PATIENT_ONLY = [
 ];
 
 export function proxy(request: NextRequest) {
+  // Walking the design: let everything through, signed in or not.
+  if (IS_DEVELOPMENT) return NextResponse.next();
+
   const { pathname } = request.nextUrl;
   const session = decodeSession(request.cookies.get(SESSION_COOKIE)?.value);
 

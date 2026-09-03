@@ -5,6 +5,7 @@ import { JourneyPanel } from "@/components/JourneyPanel";
 import { OverlayStack } from "@/components/OverlayStack";
 import { ScrollFx } from "@/components/ScrollFx";
 import { Reveal, CountUp } from "@/components/Reveal";
+import { MobileNav } from "@/components/MobileNav";
 import {
   ArrowDownIcon,
   ArrowRight,
@@ -181,14 +182,20 @@ export default function Landing() {
     <div className="bg-paper">
       {/* Portfolio disclaimer. This is a design project, and anyone who opens
           the link has to know that before they read anything else. */}
-      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 bg-night px-6 py-2 sm:px-[72px] lg:h-[46px] lg:py-0">
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-0.5 bg-night px-6 py-2 sm:px-[72px] lg:h-[46px] lg:py-0">
         <span className="flex items-center gap-2.5 text-amber">
           <FlaskIcon size={14} />
           <span className="text-[11px] font-bold uppercase tracking-[1.5px]">
             Portfolio concept
           </span>
         </span>
-        <span className="text-[12.5px] text-night-muted">
+        {/* The full sentence is three lines on a 375px screen — a quarter of the
+            first thing anyone sees. The short form carries the same warning and
+            the long one returns as soon as there is room for it. */}
+        <span className="text-[12px] text-night-muted sm:hidden">
+          A design project, not a live service.
+        </span>
+        <span className="hidden text-[12.5px] text-night-muted sm:inline">
           SHATS is a design project, not a live service. No real doctors or patients are shown,
           and no consultation can be booked.
         </span>
@@ -200,7 +207,7 @@ export default function Landing() {
           the pin releases the moment the cover is complete — the overlay
           ends here and the journey below scrolls on its own terms. */}
       <div className="relative">
-        <section className="relative isolate z-0 flex min-h-[760px] flex-col overflow-hidden lg:sticky lg:top-0 lg:h-[100svh] lg:min-h-[620px]">
+        <section className="relative isolate z-0 flex min-h-[620px] flex-col overflow-hidden sm:min-h-[760px] lg:sticky lg:top-0 lg:h-[100svh] lg:min-h-[620px]">
           <Image
             src="/img/clinic.jpg"
             alt=""
@@ -216,7 +223,9 @@ export default function Landing() {
             }}
           />
 
-          <header className="flex h-20 shrink-0 items-center justify-between px-6 sm:px-[72px] lg:h-24">
+          {/* `relative` so the mobile menu can hang off the header's own bottom
+              edge rather than off the hero. */}
+          <header className="relative flex h-20 shrink-0 items-center justify-between gap-3 px-6 sm:px-[72px] lg:h-24">
             <Logo variant="light" height={36} />
             <nav className="hidden items-center gap-9 md:flex">
               {NAV.map((l) => (
@@ -229,18 +238,25 @@ export default function Landing() {
                 </a>
               ))}
             </nav>
-            <Link
-              href="/welcome"
-              className="flex h-[46px] items-center rounded-full bg-clay px-6 text-[14.5px] font-semibold text-white hover:bg-[#a9490f]"
-            >
-              Get care
-            </Link>
+            <div className="flex items-center gap-2.5">
+              <Link
+                href="/welcome"
+                className="flex h-[46px] shrink-0 items-center rounded-full bg-clay px-5 text-[14.5px] font-semibold text-white hover:bg-[#a9490f] sm:px-6"
+              >
+                Get care
+              </Link>
+              <MobileNav links={NAV} />
+            </div>
           </header>
 
-          <div className="flex flex-1 flex-col justify-center px-6 py-16 sm:px-[72px] lg:py-0">
-            <div className="flex w-full flex-col gap-[26px] lg:max-w-[780px]">
+          <div className="flex flex-1 flex-col justify-center px-6 py-12 sm:px-[72px] sm:py-16 lg:py-0">
+            <div className="flex w-full flex-col gap-5 sm:gap-[26px] lg:max-w-[780px]">
             <Reveal>
-              <span className="inline-flex h-[34px] items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.12] px-4 text-[11.5px] font-semibold tracking-[1.4px] text-[#F0D9A8]">
+              {/* A fixed 34px height cannot hold this list at 375px — the five
+                  language names wrap and spill out of the pill. It keeps the
+                  pill shape when it fits on one line and becomes a rounded box
+                  when it does not, instead of overflowing either way. */}
+              <span className="inline-flex min-h-[34px] flex-wrap items-center gap-2 rounded-[17px] border border-white/20 bg-white/[0.12] px-3.5 py-1.5 text-[10.5px] font-semibold leading-[1.5] tracking-[1.1px] text-[#F0D9A8] sm:gap-2.5 sm:rounded-full sm:px-4 sm:py-0 sm:text-[11.5px] sm:tracking-[1.4px]">
                 <LanguagesIcon size={15} />
                 IGBO · HAUSA · YORÙBÁ · PIDGIN · ENGLISH
               </span>
@@ -307,9 +323,9 @@ export default function Landing() {
           {/* ----------------------------- the problem --------------------------- */}
           {/* 104/72 padding, 58px between head and stats, head split 660 + 436
               across a 100px gutter — the canvas values, held at lg and up. */}
-          <section className="flex flex-col justify-center gap-10 bg-paper px-6 py-[72px] sm:px-[72px] lg:h-[100svh] lg:gap-[58px] lg:py-[104px]">
+          <section className="flex flex-col justify-center gap-10 bg-paper px-6 py-12 sm:px-[72px] sm:py-[72px] lg:h-[100svh] lg:gap-[58px] lg:py-[104px]">
             <Reveal>
-              <div className="flex flex-col gap-10 lg:flex-row lg:gap-[100px]">
+              <div className="flex flex-col gap-10 xl:flex-row xl:gap-[100px]">
                 <div className="flex w-full flex-col gap-[22px] lg:max-w-[660px]">
                   <SectionLabel>
                     The problem
@@ -318,7 +334,7 @@ export default function Landing() {
                     In rural Nigeria, distance is the disease.
                   </h2>
                 </div>
-                <p className="text-[17px] leading-[1.667] text-ink-soft lg:max-w-[436px] lg:shrink-0 lg:text-[18px]">
+                <p className="text-[17px] leading-[1.667] text-ink-soft lg:text-[18px] xl:max-w-[436px] xl:shrink-0">
                   Most Nigerians who die of treatable illness do not die because the medicine does not
                   exist. They die because the road to it is too long, too expensive, or too late at
                   night to travel.
@@ -359,7 +375,7 @@ export default function Landing() {
         <section id="how" className="bg-[#062E35]">
           {/* 100/74 top and bottom, a 700 + 396 split across a 100px gutter,
               bottom-aligned — the canvas measurements. */}
-          <div className="flex flex-col gap-10 px-6 pb-[74px] pt-[72px] sm:px-[72px] lg:flex-row lg:items-end lg:gap-[100px] lg:pt-[100px]">
+          <div className="flex flex-col gap-10 px-6 pb-12 pt-12 sm:px-[72px] sm:pb-[74px] sm:pt-[72px] lg:pt-[100px] xl:flex-row xl:items-end xl:gap-[100px]">
             <Reveal className="lg:w-[700px] lg:shrink-0">
               <SectionLabel tone="amber">
                 How it works
@@ -398,7 +414,10 @@ export default function Landing() {
                 </div>
               }
               media={
-                <div className="flex items-center justify-center rounded-[14px] bg-[#0A3C46] px-8 py-8 lg:h-[452px] lg:px-10 lg:py-0">
+                /* The frame around the mock is decoration; on a phone it was
+                   spending 64px of a 297px column on its own inset, so the card
+                   inside had 201px to lay out a screen in. */
+                <div className="flex items-center justify-center rounded-[14px] bg-[#0A3C46] px-3 py-4 sm:px-8 sm:py-8 lg:h-[452px] lg:px-10 lg:py-0">
                   <JourneyCard step={i} />
                 </div>
               }
@@ -414,7 +433,7 @@ export default function Landing() {
           {/* ------------------------ works without ------------------------ */}
           {/* Canvas: 104/72 padding, a 452 column and the list across a 96px
               gutter, both centred against the panel. */}
-          <section className="bg-paper px-6 py-[72px] sm:px-[72px] lg:flex lg:h-[100svh] lg:flex-col lg:justify-center lg:py-[104px]">
+          <section className="bg-paper px-6 py-12 sm:px-[72px] sm:py-[72px] lg:flex lg:h-[100svh] lg:flex-col lg:justify-center lg:py-[104px]">
             {/* Only type and icons here, so it unblurs and grows rather than
                 sliding — and reverses on the way back up. */}
             <ScrollFx
@@ -469,7 +488,7 @@ export default function Landing() {
             <div className="relative min-h-[360px]">
               <Image src="/img/chw-visit.png" alt="" fill className="object-cover" />
             </div>
-            <div className="flex flex-col justify-center gap-[22px] px-6 py-16 sm:px-[72px] lg:py-0">
+            <div className="flex flex-col justify-center gap-[22px] px-6 py-12 sm:px-[72px] sm:py-16 lg:py-0">
               <Reveal>
                 <SectionLabel tone="amber">
                   The person in the middle
@@ -517,11 +536,11 @@ export default function Landing() {
               split, 28px between cards, photos a flat 340 tall. */}
           <section
             id="doctors"
-            className="bg-paper px-6 py-[56px] sm:px-[72px] lg:flex lg:h-[100svh] lg:flex-col lg:justify-center"
+            className="bg-paper px-6 py-10 sm:px-[72px] sm:py-[56px] lg:flex lg:h-[100svh] lg:flex-col lg:justify-center"
           >
             <Reveal>
-              <div className="flex flex-col gap-10 lg:flex-row lg:gap-[100px]">
-                <div className="flex flex-col gap-5 lg:w-[660px] lg:shrink-0">
+              <div className="flex flex-col gap-10 xl:flex-row xl:gap-[100px]">
+                <div className="flex flex-col gap-5 xl:w-[660px] xl:shrink-0">
                   <SectionLabel>
                     Who you will meet
                   </SectionLabel>
@@ -529,7 +548,7 @@ export default function Landing() {
                     Every doctor is checked against the register before they see anyone.
                   </h2>
                 </div>
-                <p className="text-[17px] leading-[1.647] text-ink-soft lg:max-w-[436px] lg:shrink-0">
+                <p className="text-[17px] leading-[1.647] text-ink-soft xl:max-w-[436px] xl:shrink-0">
                   Licence verified with the Medical and Dental Council of Nigeria, identity confirmed,
                   and every consultation recorded. If a doctor is struck off, their account closes the
                   same day.
@@ -537,7 +556,7 @@ export default function Landing() {
               </div>
             </Reveal>
 
-            <div className="mt-[34px] grid gap-[28px] md:grid-cols-3">
+            <div className="mt-7 grid sm:mt-[34px] gap-[28px] md:grid-cols-3">
               {doctors.map((d, i) => (
                 <Reveal key={d.id} delay={i * 100}>
                   <article className="flex flex-col gap-4">
@@ -592,7 +611,7 @@ export default function Landing() {
           {/* Last panel of the run, and deliberately static: it is the one moment
               on the page that should feel like an alarm, not a flourish.
               Canvas: 96/72 padding, 26px rhythm, 56px chips on a 16px chain. */}
-          <section className="bg-[#08272E] px-6 py-[72px] sm:px-[72px] lg:flex lg:h-[100svh] lg:flex-col lg:justify-center lg:py-[96px]">
+          <section className="bg-[#08272E] px-6 py-12 sm:px-[72px] sm:py-[72px] lg:flex lg:h-[100svh] lg:flex-col lg:justify-center lg:py-[96px]">
             <div className="flex flex-col gap-[26px]">
               <SectionLabel tone="alert">
                 When it is urgent
@@ -612,7 +631,9 @@ export default function Landing() {
                         <ArrowRight size={19} />
                       </span>
                     )}
-                    <span className="inline-flex h-[56px] items-center gap-[11px] rounded-full border border-[#1D5460] bg-[#0E3A43] px-[22px] text-[15.5px] font-semibold text-night-text">
+                    {/* The label wraps at 375px, so the height is a floor
+                        rather than a fixed box and the padding carries it. */}
+                    <span className="inline-flex min-h-[56px] items-center gap-[11px] rounded-[28px] border border-[#1D5460] bg-[#0E3A43] px-[18px] py-2.5 text-[14.5px] font-semibold text-night-text sm:rounded-full sm:px-[22px] sm:py-0 sm:text-[15.5px]">
                       <span className="text-amber">
                         <SirenIcon size={19} />
                       </span>
@@ -628,10 +649,10 @@ export default function Landing() {
         {/* ------------------------------- learn ------------------------------- */}
         {/* Canvas: 104/72 padding, 52px between head and cards, 660 + 436 head
             split, 28px between cards, photos 196 tall. */}
-        <section className="bg-paper px-6 py-[72px] sm:px-[72px] lg:py-[104px]">
+        <section className="bg-paper px-6 py-12 sm:px-[72px] sm:py-[72px] lg:py-[104px]">
           <ScrollFx mode="fade">
-            <div className="flex flex-col gap-10 lg:flex-row lg:gap-[100px]">
-              <div className="flex flex-col gap-5 lg:w-[660px] lg:shrink-0">
+            <div className="flex flex-col gap-10 xl:flex-row xl:gap-[100px]">
+              <div className="flex flex-col gap-5 xl:w-[660px] xl:shrink-0">
                 <SectionLabel>
                   Between visits
                 </SectionLabel>
@@ -639,14 +660,14 @@ export default function Landing() {
                   Plain answers, read aloud, in your own language.
                 </h2>
               </div>
-              <p className="text-[17px] leading-[1.647] text-ink-soft lg:max-w-[436px] lg:shrink-0">
+              <p className="text-[17px] leading-[1.647] text-ink-soft xl:max-w-[436px] xl:shrink-0">
                 Health information written for people who were never taught to read it — short,
                 spoken, and free whether or not you ever book a consultation.
               </p>
             </div>
           </ScrollFx>
 
-          <div className="mt-[52px] grid gap-[28px] md:grid-cols-3">
+          <div className="mt-9 grid sm:mt-[52px] gap-[28px] md:grid-cols-3">
             {articles.map((a) => (
               <ScrollFx mode="fade" key={a.slug}>
                 <Link href="/learn" className="flex flex-col gap-[15px]">
@@ -667,10 +688,10 @@ export default function Landing() {
         </section>
 
         {/* ------------------------------ safety ------------------------------- */}
-        <section id="safety" className="bg-[#062E35] px-6 py-[72px] sm:px-[72px] lg:py-[104px]">
+        <section id="safety" className="bg-[#062E35] px-6 py-12 sm:px-[72px] sm:py-[72px] lg:py-[104px]">
           <ScrollFx mode="fade">
-            <div className="flex flex-col gap-10 lg:flex-row lg:gap-[100px]">
-              <div className="flex flex-col gap-5 lg:w-[660px] lg:shrink-0">
+            <div className="flex flex-col gap-10 xl:flex-row xl:gap-[100px]">
+              <div className="flex flex-col gap-5 xl:w-[660px] xl:shrink-0">
                 <SectionLabel tone="amber">
                   Safety and privacy
                 </SectionLabel>
@@ -678,14 +699,14 @@ export default function Landing() {
                   Your record belongs to you, not to a clinic.
                 </h2>
               </div>
-              <p className="text-[17px] leading-[1.65] text-[#9FBDC1] lg:max-w-[436px] lg:shrink-0">
+              <p className="text-[17px] leading-[1.65] text-[#9FBDC1] xl:max-w-[436px] xl:shrink-0">
                 Rural patients are used to their history living in a paper file in a building they
                 cannot get back to. On SHATS it travels with them.
               </p>
             </div>
           </ScrollFx>
 
-          <div className="mt-[58px] grid gap-10 md:grid-cols-4 md:gap-0">
+          <div className="mt-9 grid sm:mt-[58px] gap-10 md:grid-cols-4 md:gap-0">
             {SAFEGUARDS.map((s, i) => (
               <ScrollFx
                 mode="fade"
@@ -709,7 +730,7 @@ export default function Landing() {
             cards. The hierarchy is carried by type size and by which arrow is
             solid — the patient door is the one that matters, and a pair of
             equal coloured boxes said the opposite. */}
-        <section className="px-6 py-24 sm:px-[72px]">
+        <section className="px-6 py-14 sm:px-[72px] sm:py-24">
           <ScrollFx mode="fade">
             <SectionLabel>Where to start</SectionLabel>
             <h2 className="mt-[18px] font-display text-[clamp(30px,4.5vw,48px)] font-semibold leading-[1.12] tracking-[-0.02em] text-pine">
@@ -774,7 +795,7 @@ export default function Landing() {
         {/* ------------------------------- footer ------------------------------ */}
         {/* Canvas order: brand + link columns, then the disclaimer, then the
             rule, then the bottom bar. 76/72 padding, 80px gutter. */}
-        <footer className="bg-night px-6 py-[72px] sm:px-[72px] lg:py-[76px]">
+        <footer className="bg-night px-6 py-12 sm:px-[72px] sm:py-[72px] lg:py-[76px]">
           <div className="flex flex-col gap-12 lg:flex-row lg:gap-20">
             <div className="flex flex-col items-start gap-4 lg:w-[352px] lg:shrink-0">
               <Logo variant="light" height={34} />
@@ -840,8 +861,11 @@ export default function Landing() {
 /* -------------------------------------------------------------------------- */
 
 function JourneyCard({ step }: { step: number }) {
+  // The padding is the whole reason these read as cramped on a phone: at 375px
+  // the panel, the card and the inner blocks each took 26px a side, leaving 233px
+  // of content. Halving it on mobile returns 40px of width to the card.
   const shell =
-    "flex w-full max-w-[clamp(440px,36vw,760px)] flex-col gap-[15px] rounded-[14px] bg-paper p-[26px]";
+    "flex w-full max-w-[clamp(440px,36vw,760px)] flex-col gap-[15px] rounded-[14px] bg-paper p-4 sm:p-[26px]";
 
   if (step === 0) {
     const tiles = [
@@ -855,7 +879,9 @@ function JourneyCard({ step }: { step: number }) {
         <p className="text-[10.5px] font-bold uppercase tracking-[0.15em] text-clay">
           Question 1 of 3
         </p>
-        <h4 className="font-display text-[31px] font-semibold text-pine">What is wrong?</h4>
+        <h4 className="font-display text-[25px] font-semibold text-pine sm:text-[31px]">
+          What is wrong?
+        </h4>
         <span className="inline-flex items-center gap-2 rounded-full bg-pine-wash px-4 py-2 text-sm font-semibold text-pine">
           Listen in Igbo
         </span>
@@ -929,8 +955,8 @@ function JourneyCard({ step }: { step: number }) {
             CO
           </span>
           <p className="text-[17px] font-semibold text-white">Dr. Chidi Okonkwo</p>
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-[#D3E2E4]">
-            <span className="h-2 w-2 rounded-full bg-[#5FBF7A]" /> You are connected · 04:12
+          <span className="inline-flex min-h-[26px] items-center gap-2 rounded-[13px] bg-white/10 px-3 py-1 text-[11.5px] font-semibold leading-snug text-[#D3E2E4] sm:rounded-full sm:px-3.5 sm:py-1.5 sm:text-xs">
+            <span className="h-2 w-2 shrink-0 rounded-full bg-[#5FBF7A]" /> You are connected · 04:12
           </span>
         </div>
         <p className="rounded-[8px] bg-clay-wash p-3.5 text-[13.5px] leading-snug text-clay">
@@ -948,15 +974,19 @@ function JourneyCard({ step }: { step: number }) {
       <p className="text-[10.5px] font-bold uppercase tracking-[0.15em] text-clay">
         After the visit
       </p>
-      <div className="flex items-center gap-3.5 rounded-[8px] border border-line bg-white p-3.5">
-        <span className="text-pine">
-          <PillIcon size={24} />
+      {/* The pill was squeezed to 68px wide beside the medicine name at 375px,
+          so below sm the row stacks and it sits on its own line at full size. */}
+      <div className="flex flex-col items-start gap-2.5 rounded-[8px] border border-line bg-white p-3.5 sm:flex-row sm:items-center sm:gap-3.5">
+        <span className="flex items-center gap-3.5 sm:contents">
+          <span className="text-pine">
+            <PillIcon size={24} />
+          </span>
+          <span className="flex-1">
+            <span className="block text-[16.5px] font-semibold text-ink">Coartem</span>
+            <span className="block text-[13.5px] text-muted">1 tablet, twice a day, for 3 days</span>
+          </span>
         </span>
-        <span className="flex-1">
-          <span className="block text-[16.5px] font-semibold text-ink">Coartem</span>
-          <span className="block text-[13.5px] text-muted">1 tablet, twice a day, for 3 days</span>
-        </span>
-        <span className="rounded-full bg-pine-wash px-3 py-1.5 text-[11.5px] font-semibold text-pine">
+        <span className="shrink-0 rounded-full bg-pine-wash px-3 py-1.5 text-[11.5px] font-semibold text-pine">
           Ready at Eze Chemist
         </span>
       </div>
