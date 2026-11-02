@@ -831,20 +831,12 @@ export default function Landing() {
             <p className="text-[10.5px] font-bold uppercase tracking-[1.5px] text-amber">
               About this project
             </p>
-            <p className="max-w-[1000px] text-[13.5px] leading-[1.63] text-night-muted">
-              SHATS is a university design project (CSC 411, Object-Oriented Analysis &amp; Design).
-              It is not a real service, it is not registered with any health authority, and it cannot
-              be used to obtain medical care or advice. Doctor and patient names are illustrative.
-              Some photographs are AI-generated and do not depict real people. Statistics are cited
-              from WHO and World Bank sources and were checked in August 2026.
-            </p>
           </div>
 
           <div className="mt-[34px] h-px w-full bg-night-line" />
 
           <div className="flex flex-wrap items-center justify-between gap-7 pt-[26px] text-[13.5px] text-night-muted">
-            <span>© 2026 SHATS · A CSC 411 design project</span>
-            <span className="flex flex-wrap gap-[26px]">
+            <span className="flex flex-wrap gap-[26px] ml-auto">
               <span>Terms</span>
               <span>Privacy</span>
               <span>Data protection (NDPR)</span>
